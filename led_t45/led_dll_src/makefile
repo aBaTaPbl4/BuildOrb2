@@ -266,7 +266,6 @@ clean_all:
 	rm -f $(TARGET).hex	\
 	$(TARGET).lst		\
 	$(TARGET).obj		\
-	$(TARGET).cof		\
 	$(TARGET).list		\
 	$(TARGET).map		\
 	$(TARGET).eep.hex	\
@@ -307,7 +306,6 @@ $(TARGET).elf: $(USB_DRV_DIR) $(OBJECTS)	# зависимость (dependency) usbdrv нужна
 $(TARGET).hex: $(TARGET).elf
 	rm -f $(TARGET).hex $(TARGET).eep.hex
 	avr-objcopy -j .text -j .data -O ihex $(TARGET).elf $(TARGET).hex
-	avr-objcopy --debugging -O coff-ext-avr $< $(TARGET).cof
 	avr-size $(TARGET).hex 
 	avr-size $(TARGET).elf
 	
