@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Only_ChekBox_Led", "Only_ChekBox_Led\Only_ChekBox_Led.csproj", "{FF122D9B-8543-4CDF-95C1-D69834AF33E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF122D9B-8543-4CDF-95C1-D69834AF33E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF122D9B-8543-4CDF-95C1-D69834AF33E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF122D9B-8543-4CDF-95C1-D69834AF33E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF122D9B-8543-4CDF-95C1-D69834AF33E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
