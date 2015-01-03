@@ -1,0 +1,12 @@
+INPUT(
+./release/main.o
+./release/relaycheckbox.o
+./release/obdev_usb.o
+./release/usbrelay.o
+./release/usb.o
+./release/error.o
+./release/windows.o
+./release/registry.o
+./release/descriptors.o
+./release/moc_relaycheckbox.o
+);

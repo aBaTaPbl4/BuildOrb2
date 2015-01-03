@@ -1,0 +1,56 @@
+4 сент€бр€ 2008
+
+avrusb08@obdev.at
+office08@obdev.at
+“ема: [USB#1412611]  ()
+
+office08@obdev.at
+avrusb08@obdev.at
+“ема: [OFFICE#1412696]
+
+«дравствуйте!
+
+			я хочу продавать макетные платы дл€ радиолюбителей, которые могли бы использовать ¬ашу библиотеку avr-usb на этих платах. ¬месте с платами планируетс€ поставл€ть CD-ROM с кодом avr-usb, где будут переведены на русский €зык комментарии к коду и документаци€.
+
+¬ переведенной документации € готов сохранить все ссылки на авторов проекта avr-usb. ќднако € не хотел бы публиковать на моем сайте содержимое переведенной на русский €зык документации (котора€ содержитс€ на CD-ROM). ’отелось бы просто ограничитьс€, если возможно, ссылкой на сайт avr-usb (http://www.obdev.at/avrusb/).
+
+			ћогу ли € использовать дл€ продажи макетных плат свободную лицензию GPL, которой ¬ы лицензируете avr-usb? ≈сли нет, то какую лицензию € могу использовать и на каких услови€х?
+
+Hello!
+
+I want to sell prototyping boards (maketing PCB) for radio amateurs which would use Your library of avr-usb on these PCB. Together with this PCB it is planned to supply with CD-ROM contained the code of avr-usb, where will be translated into the Russian language comments to the code and avr-usb documents. 
+
+In the translated document I am ready to save all Refs.s on the authors of project of avr-usb. However much I would like to publish on my site content of the document translated into the Russian language (which is contained on CD-ROM). It would be desirable to be simply limited, if possible, by reference to the site of avr-usb (http://www.obdev.at/avrusb/).
+
+Do I can to use for the sale of prototyping boards the free license (GPL), which you license avr-usb? If is not it, then what license I can use and on what terms?
+
+Best reagrds, Andrey Sinytkin
+sin_place@mail.ru
+http://microsin.ru
+
+----------------------------------------------------------------
+16 сент€бр€ 2008
+Hi Andrey,
+
+You can do whatever you like with avr-usb, as long as you publish  
+derived work under the GPL. Bundling it with a prototyping board is  
+OK, even if you sell it. A version with Russian documentation is also  
+OK, as long as you publish it for free.
+
+If you make a Russian version available on your web site, please mail  
+us an URL so that we can link it.
+
+Regards, Christian.
+
+-- 
+DI Christian Starkjohann <cs@obdev.at>
+OBJECTIVE DEVELOPMENT Software GmbH
+
+Thanks to you, Christian!
+
+Link to prototyping board info here: http://microsin.ru/content/view/605/44/
+Direct link to download russian documentation here: http://microsin.ru/Download.cnt/avr/avr-usb-russian.rar
+
+Best regards, Andrey Sinytkin
+sin_place@mail.ru
+http://microsin.ru

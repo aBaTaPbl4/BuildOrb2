@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "VUSB", "VUSB\VUSB.cproj", "{6A428DE3-6C2F-412D-A801-4BAF24693FAD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A428DE3-6C2F-412D-A801-4BAF24693FAD}.Debug|AVR.ActiveCfg = Debug|AVR
+		{6A428DE3-6C2F-412D-A801-4BAF24693FAD}.Debug|AVR.Build.0 = Debug|AVR
+		{6A428DE3-6C2F-412D-A801-4BAF24693FAD}.Release|AVR.ActiveCfg = Release|AVR
+		{6A428DE3-6C2F-412D-A801-4BAF24693FAD}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

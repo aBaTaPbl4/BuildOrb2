@@ -1,0 +1,12 @@
+INPUT(
+./debug/main.o
+./debug/relaycheckbox.o
+./debug/obdev_usb.o
+./debug/usbrelay.o
+./debug/usb.o
+./debug/error.o
+./debug/windows.o
+./debug/registry.o
+./debug/descriptors.o
+./debug/moc_relaycheckbox.o
+);

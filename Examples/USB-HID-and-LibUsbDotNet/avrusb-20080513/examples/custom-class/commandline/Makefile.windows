@@ -1,0 +1,23 @@
+# Имя: Makefile.windows
+# Проект: пример custom-class
+# Автор: Christian Starkjohann
+# Дата создания: 2008-04-06
+# Табуляция: 4
+# Copyright: (c) 2008 by OBJECTIVE DEVELOPMENT Software GmbH
+# Лицензия: GNU GPL v2 (см. License.txt) или проприетарная (CommercialLicense.txt) 
+# Ревизия: $Id$
+
+# Вы можете использовать этот файл с командой
+#   make -f Makefile.windows
+# на Windows вместе с пакетом MinGW (вместо редактирования основного Makefile).
+
+include Makefile
+
+#USBFLAGS = -I/usr/local/mingw/include
+USBFLAGS = "-Ic:\Program Files\LibUSB-Win32\include"
+
+#USBLIBS = -L/usr/local/mingw/lib -lusb
+USBLIBS = -L"c:/Program Files/LibUSB-Win32/lib/gcc" -lusb
+#USBLIBS = -L. -l usb
+
+EXE_SUFFIX = .exe

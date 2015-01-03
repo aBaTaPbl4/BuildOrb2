@@ -1,0 +1,22 @@
+# comments
+syntax: glob
+*.o
+*.d
+*.hex
+*.lss
+*.map
+*.exe
+*.pdf
+*.elf
+*.eep
+*.tar.gz
+*.jpg
+*.JPG
+*.png
+*.url
+*.cof
+*.ncb
+
+firmware/hex
+software\VUSBProba\obj\x86
+software\VUSBProba\bin

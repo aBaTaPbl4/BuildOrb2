@@ -68,7 +68,7 @@ static uchar        usbMsgFlags;    					/* значения флагов - см. далее */
 #if USB_CFG_DESCR_PROPS_STRING_0 == 0
 #undef USB_CFG_DESCR_PROPS_STRING_0
 #define USB_CFG_DESCR_PROPS_STRING_0    sizeof(usbDescriptorString0)
-PROGMEM char usbDescriptorString0[] = { /* описатель языка */
+PROGMEM const char usbDescriptorString0[] = { /* описатель языка */
     4,          /* sizeof(usbDescriptorString0): длина описателя в байтах */
     3,          /* тип дескриптора */
     0x09, 0x04, /* индекс языка (0x0409 = US-English) */
@@ -78,7 +78,7 @@ PROGMEM char usbDescriptorString0[] = { /* описатель языка */
 #if USB_CFG_DESCR_PROPS_STRING_VENDOR == 0 && USB_CFG_VENDOR_NAME_LEN
 #undef USB_CFG_DESCR_PROPS_STRING_VENDOR
 #define USB_CFG_DESCR_PROPS_STRING_VENDOR   sizeof(usbDescriptorStringVendor)
-PROGMEM int  usbDescriptorStringVendor[] = {
+PROGMEM const int  usbDescriptorStringVendor[] = {
     USB_STRING_DESCRIPTOR_HEADER(USB_CFG_VENDOR_NAME_LEN),
     USB_CFG_VENDOR_NAME
 };
@@ -87,7 +87,7 @@ PROGMEM int  usbDescriptorStringVendor[] = {
 #if USB_CFG_DESCR_PROPS_STRING_PRODUCT == 0 && USB_CFG_DEVICE_NAME_LEN
 #undef USB_CFG_DESCR_PROPS_STRING_PRODUCT
 #define USB_CFG_DESCR_PROPS_STRING_PRODUCT   sizeof(usbDescriptorStringDevice)
-PROGMEM int  usbDescriptorStringDevice[] = {
+PROGMEM const int usbDescriptorStringDevice[] = {
     USB_STRING_DESCRIPTOR_HEADER(USB_CFG_DEVICE_NAME_LEN),
     USB_CFG_DEVICE_NAME
 };
@@ -109,7 +109,7 @@ PROGMEM int usbDescriptorStringSerialNumber[] = {
 #if USB_CFG_DESCR_PROPS_DEVICE == 0
 #undef USB_CFG_DESCR_PROPS_DEVICE
 #define USB_CFG_DESCR_PROPS_DEVICE  sizeof(usbDescriptorDevice)
-PROGMEM char usbDescriptorDevice[] = {    /* USB дескриптор устройства */
+PROGMEM const char usbDescriptorDevice[] = {    /* USB дескриптор устройства */
     18,         /* sizeof(usbDescriptorDevice): длина устройства в байтах */
     USBDESCR_DEVICE,        /* тип дескриптора */
     0x10, 0x01,             /* поддерживаемая версия USB */
@@ -140,7 +140,7 @@ PROGMEM char usbDescriptorDevice[] = {    /* USB дескриптор устройства */
 #if USB_CFG_DESCR_PROPS_CONFIGURATION == 0
 #undef USB_CFG_DESCR_PROPS_CONFIGURATION
 #define USB_CFG_DESCR_PROPS_CONFIGURATION   sizeof(usbDescriptorConfiguration)
-PROGMEM char usbDescriptorConfiguration[] = {    /* USB дескриптор конфигурации */
+PROGMEM const char usbDescriptorConfiguration[] = {    /* USB дескриптор конфигурации */
     9,          /* sizeof(usbDescriptorConfiguration): длина устройства в байтах */
     USBDESCR_CONFIG,    /* тип дескриптора */
     18 + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT3 +
