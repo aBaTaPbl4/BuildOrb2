@@ -21,8 +21,8 @@
 #include <stdlib.h>
 #include <string.h>
 //#include "C:\Program Files\LibUSB-Win32\include\usb.h"//<usb.h>        /* это libusb */
-//#include "C:\Program Files (x86)\LibUSB-Win32\include\usb.h"//<usb.h>        /* это libusb */
-#include <usb.h>
+#include "P:\BuildOrb\Libs\LibUSB-Win32\include\usb.h"//<usb.h>        /* это libusb */
+//#include <usb.h>
 #include "opendevice.h" /* общий код перемещен в отдельный модуль */
 
 #include "../requests.h"   /* номера custom request */

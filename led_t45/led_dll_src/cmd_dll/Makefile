@@ -21,12 +21,12 @@
 
 #USBFLAGS = -I/usr/local/include
 
-USBFLAGS = -I"c:/.My projects/BuildOrb/Libs/LibUSB-Win32/include"
+USBFLAGS = -I"p:/BuildOrb/Libs/LibUSB-Win32/include"
 #USBFLAGS = -I"C:/Program Files (x86)/LibUSB-Win32/include"
 #USBFLAGS = -I"C:/LibUSB/include/"
 
 #USBLIBS = -L/usr/local/lib -lusb
-USBLIBS = -L"c:/.My projects/BuildOrb/Libs/LibUSB-Win32/lib/gcc" -lusb
+USBLIBS = -L"p:/BuildOrb/Libs/LibUSB-Win32/lib/gcc" -lusb
 #USBLIBS = -L"C:/Program Files (x86)/LibUSB-Win32/lib/gcc" -lusb
 #USBLIBS = -L"C:/LibUSB/lib/gcc" -lusb
 
