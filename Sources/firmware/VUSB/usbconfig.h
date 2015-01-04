@@ -138,10 +138,10 @@
     после Ваших действий. Одно из возможных приложений демонстрируется здесь One possible application
     (кроме отладки) - мигание LED при каждом пакете.
  */
-//#define usb_reset_hook(resetstarts)     if(!resetstarts){hadusbreset();} 
-//#ifndef __assembler__
-//extern void hadusbreset(void); // define the function for usbdrv.c
-//#endif	
+#define USB_RESET_HOOK(resetStarts)     if(!resetStarts){hadUsbReset();}
+#ifndef __ASSEMBLER__
+extern void hadUsbReset(void); // define the function for usbdrv.c
+#endif
 
 /* Этот macro является хуком для обработки события USB RESET. Он имеет один параметр, позволяющий
    отличать старт состояния RESET от окончания состояния RESET.
@@ -154,7 +154,7 @@
     подсчитываются пакеты SOF. Эта возможность требует подключения аппаратного
     прерывания к D- вместо D+.
  */
-#define USB_CFG_HAVE_MEASURE_FRAME_LENGTH   0
+#define USB_CFG_HAVE_MEASURE_FRAME_LENGTH   1
 /* Задайте здесь 1, если Вам нужна функция usbMeasureFrameLength() - тогда она скомпилируется.
     Эта функция может использоваться для подстройки генератора RC микроконтроллера AVR.
  */
@@ -166,7 +166,7 @@
     собственный Vendor ID, укажите его здесь. В противном случае используйте один из 
     свободно предоставляемых пар VID/PID obdev. Прочитайте правила USBID-License.txt!
  */
-#define  USB_CFG_DEVICE_ID       0xdf, 0x05 /* предоставленный в общее пользование obdev PID для устройств HID */
+#define  USB_CFG_DEVICE_ID       0xdb, 0x05 /* предоставленный в общее пользование obdev PID для устройств HID */
 /* Это ID продукта, младший байт идет первым. Он интерпретируется в контексте 
     vendor ID. Если Вы зарегистрировали свой собственный VID на usb.org,
     или если пользуетесь лицензией на PID от кого-нибудь еще, укажите его здесь. 
@@ -185,7 +185,7 @@
     доменное имя Internet, если Вы используете свободно распространяемую пару 
     obdev VID/PID. За деталями обращайтесь к файлу USBID-License.txt.
  */
-#define USB_CFG_DEVICE_NAME     'L', 'E', 'D', 'C', 't', 'l', 'H', 'I', 'D'
+#define USB_CFG_DEVICE_NAME     'B', 'U', 'I', 'L', 'D', '.', 'O', 'R', 'B'
 #define USB_CFG_DEVICE_NAME_LEN 9
 /* Здесь указывается имя устройства (device name) таким же способом, как и в предыдущем 
     параметре указывается имя вендора. Если Вам не нужно имя устройства, закомментируйте

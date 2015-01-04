@@ -76,7 +76,7 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>NDEBUG</Value>
-      <Value>F_CPU=20000000UL</Value>
+      <Value>F_CPU=16500000UL</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
   <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
@@ -88,7 +88,7 @@
       <Value>libm</Value>
     </ListValues>
   </avrgcc.linker.libraries.Libraries>
-  <avrgcc.assembler.general.AssemblerFlags>-DF_CPU=20000000UL</avrgcc.assembler.general.AssemblerFlags>
+  <avrgcc.assembler.general.AssemblerFlags>-DF_CPU=16500000UL</avrgcc.assembler.general.AssemblerFlags>
 </AvrGcc>
     </ToolchainSettings>
   </PropertyGroup>

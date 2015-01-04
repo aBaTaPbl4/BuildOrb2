@@ -228,7 +228,7 @@ extern void hadUsbReset(void); // define the function for usbdrv.c
  * with libusb: 0x16c0/0x5dc.  Use this VID/PID pair ONLY if you understand
  * the implications!
  */
-#define  USB_CFG_DEVICE_ID       0xdc, 0x05 /* = 0x05dc = 1500 */
+#define  USB_CFG_DEVICE_ID       0xdb, 0x05 /* = 0x05dc = 1500 */
 /* This is the ID of the product, low byte first. It is interpreted in the
  * scope of the vendor ID. If you have registered your own VID with usb.org
  * or if you have licensed a PID from somebody else, define it here. Otherwise
@@ -253,7 +253,7 @@ extern void hadUsbReset(void); // define the function for usbdrv.c
  * obdev's free shared VID/PID pair. See the file USB-IDs-for-free.txt for
  * details.
  */
-#define USB_CFG_DEVICE_NAME     'U', 'S', 'B', 'e', 'x', 'a', 'm', 'p', 'l', 'e'
+#define USB_CFG_DEVICE_NAME     'B', 'U', 'I', 'L', 'D', '.', '.', 'O', 'R', 'B'
 #define USB_CFG_DEVICE_NAME_LEN 10
 /* Same as above for the device name. If you don't want a device name, undefine
  * the macros. See the file USB-IDs-for-free.txt before you assign a name if

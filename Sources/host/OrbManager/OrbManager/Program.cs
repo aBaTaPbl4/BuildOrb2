@@ -12,7 +12,7 @@ namespace OrbManager
         #region SET YOUR USB Vendor and Product ID!
 
         public static UsbDeviceFinder MyUsbFinder =
-            new UsbDeviceFinder(0x16c0, 0x05df); // specify vendor, product id
+            new UsbDeviceFinder(0x16C0, 0x05DB); // specify vendor, product id
 
         #endregion
 
@@ -22,6 +22,9 @@ namespace OrbManager
 
             try
             {
+                UsbRegDeviceList allDevices = UsbDevice.AllDevices;
+
+                Console.WriteLine("Found {0} devices", allDevices.Count);
                 // Find and open the usb device.
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
 
