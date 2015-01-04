@@ -138,7 +138,11 @@
     после Ваших действий. Одно из возможных приложений демонстрируется здесь One possible application
     (кроме отладки) - мигание LED при каждом пакете.
  */
-/* #define USB_RESET_HOOK(resetStarts)     if(!resetStarts){hadUsbReset();} */
+//#define usb_reset_hook(resetstarts)     if(!resetstarts){hadusbreset();} 
+//#ifndef __assembler__
+//extern void hadusbreset(void); // define the function for usbdrv.c
+//#endif	
+
 /* Этот macro является хуком для обработки события USB RESET. Он имеет один параметр, позволяющий
    отличать старт состояния RESET от окончания состояния RESET.
  */

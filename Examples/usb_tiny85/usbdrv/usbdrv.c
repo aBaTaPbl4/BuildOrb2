@@ -1,64 +1,63 @@
-/* Имя: usbdrv.c
- * Проект: драйвер AVR USB
- * Автор: Christian Starkjohann
- * Перевод: microsin.ru  
- * Дата создания: 2004-12-29
- * Табуляция: 4
+/* Name: usbdrv.c
+ * Project: V-USB, virtual USB port for Atmel's(r) AVR(r) microcontrollers
+ * Author: Christian Starkjohann
+ * Creation Date: 2004-12-29
+ * Tabsize: 4
  * Copyright: (c) 2005 by OBJECTIVE DEVELOPMENT Software GmbH
- * Лицензия: GNU GPL v2 (see License.txt) or proprietary (CommercialLicense.txt)
- * Ревизия: $Id: usbdrv.c 591 2008-05-03 20:21:19Z cs $
+ * License: GNU GPL v2 (see License.txt), GNU GPL v3 or proprietary (CommercialLicense.txt)
+ * This Revision: $Id$
  */
 
-#include "iarcompat.h"
-#ifndef __IAR_SYSTEMS_ICC__
-#   include <avr/io.h>
-#   include <avr/pgmspace.h>
-#endif
+#include "usbportability.h"
 #include "usbdrv.h"
 #include "oddebug.h"
 
 /*
-Основное описание:
-Этот модуль оеализует часть драйвера USB на языке C. См. usbdrv.h по поводу документации по драйверу в целом.
+General Description:
+This module implements the C-part of the USB driver. See usbdrv.h for a
+documentation of the entire driver.
 */
 
 /* ------------------------------------------------------------------------- */
 
-/* двоичные регистры USB / интерфейс к ассемблерному коду: */
-uchar usbRxBuf[2*USB_BUFSIZE];  /* двоичный буфер RX: PID, 8 байт данных, 2 байта CRC */
-uchar       usbInputBufOffset;  /* смещение в usbRxBuf, используемое для приема на низком уровне */
-uchar       usbDeviceAddr;      /* назначается во время энумерации, по умолчанию 0 */
-uchar       usbNewDeviceAddr;   /* ID устройства, которое устанавливаться после фазы статуса */
-uchar       usbConfiguration;   /* выбранная в настоящий момент конфигурация. Администрируется драйвером, но не используется */
-volatile schar usbRxLen;        /* = 0; количество байт в usbRxBuf; 0 означает, чтобуфер пуст, -1 используется для управления потоком */
-uchar       usbCurrentTok;      /* последний принятый токен или номер конечной точки для последнего токена OUT, если != 0 */
-uchar       usbRxToken;         /* токен принятых нами данных; или номер конечной точки для последнего OUT */
-volatile uchar usbTxLen = USBPID_NAK;   /* количество байт для передачи со следующим токеном IN или токеном рукопожатия (handshake) */
-uchar       usbTxBuf[USB_BUFSIZE];/* данные для передачи со следующим IN, свободно если usbTxLen содержит токен рукопожатия (handshake) */
+/* raw USB registers / interface to assembler code: */
+uchar usbRxBuf[2*USB_BUFSIZE];  /* raw RX buffer: PID, 8 bytes data, 2 bytes CRC */
+uchar       usbInputBufOffset;  /* offset in usbRxBuf used for low level receiving */
+uchar       usbDeviceAddr;      /* assigned during enumeration, defaults to 0 */
+uchar       usbNewDeviceAddr;   /* device ID which should be set after status phase */
+uchar       usbConfiguration;   /* currently selected configuration. Administered by driver, but not used */
+volatile schar usbRxLen;        /* = 0; number of bytes in usbRxBuf; 0 means free, -1 for flow control */
+uchar       usbCurrentTok;      /* last token received or endpoint number for last OUT token if != 0 */
+uchar       usbRxToken;         /* token for data we received; or endpont number for last OUT */
+volatile uchar usbTxLen = USBPID_NAK;   /* number of bytes to transmit with next IN token or handshake token */
+uchar       usbTxBuf[USB_BUFSIZE];/* data to transmit with next IN, free if usbTxLen contains handshake token */
 #if USB_COUNT_SOF
-volatile uchar  usbSofCount;    /* увеличивается на 1 ассемблерным модулем при каждом SOF (Start-Of-Frame) */
+volatile uchar  usbSofCount;    /* incremented by assembler module every SOF */
 #endif
-#if USB_CFG_HAVE_INTRIN_ENDPOINT
+#if USB_CFG_HAVE_INTRIN_ENDPOINT && !USB_CFG_SUPPRESS_INTR_CODE
 usbTxStatus_t  usbTxStatus1;
 #   if USB_CFG_HAVE_INTRIN_ENDPOINT3
 usbTxStatus_t  usbTxStatus3;
 #   endif
 #endif
+#if USB_CFG_CHECK_DATA_TOGGLING
+uchar       usbCurrentDataToken;/* when we check data toggling to ignore duplicate packets */
+#endif
 
-/* регистры статуса USB  / не используются совместно с кодом на ассемблере */
-uchar               *usbMsgPtr;     					/* данные для последующей передачи -- адрес ROM или RAM */
-static usbMsgLen_t  usbMsgLen = USB_NO_MSG; 	/* оставшееся количество байт */
-static uchar        usbMsgFlags;    					/* значения флагов - см. далее */
+/* USB status registers / not shared with asm code */
+uchar               *usbMsgPtr;     /* data to transmit next -- ROM or RAM address */
+static usbMsgLen_t  usbMsgLen = USB_NO_MSG; /* remaining number of bytes */
+static uchar        usbMsgFlags;    /* flag values see below */
 
 #define USB_FLG_MSGPTR_IS_ROM   (1<<6)
 #define USB_FLG_USE_USER_RW     (1<<7)
 
 /*
-оптимизационные заметки:
-- не делайте post/pre inc/dec величины integer в операциях
-- назначте значения PRG_RDB() на регистровые переменные и не используйте side-эффекты в аргументах
-- используйте ограниченный диапазон переменных, которые должны быть в регистрах X/Y/Z
-- назначайте выражения с размером данных char в переменные, чтобы задействовать 8-бит арифметику
+optimizing hints:
+- do not post/pre inc/dec integer values in operations
+- assign value of USB_READ_FLASH() to register variables and don't use side effects in arg
+- use narrow scope for variables which should be in X/Y/Z register
+- assign char sized expressions to variables to force 8 bit arithmetics
 */
 
 /* -------------------------- String Descriptors --------------------------- */
@@ -104,7 +103,7 @@ PROGMEM const int usbDescriptorStringSerialNumber[] = {
 
 #endif  /* USB_CFG_DESCR_PROPS_STRINGS == 0 */
 
-/* --------------------------- Дескриптор устройства --------------------------- */
+/* --------------------------- Device Descriptor --------------------------- */
 
 #if USB_CFG_DESCR_PROPS_DEVICE == 0
 #undef USB_CFG_DESCR_PROPS_DEVICE
@@ -115,26 +114,26 @@ PROGMEM const char usbDescriptorDevice[] = {    /* USB дескриптор устройства */
     0x10, 0x01,             /* поддерживаемая версия USB */
     USB_CFG_DEVICE_CLASS,
     USB_CFG_DEVICE_SUBCLASS,
-    0,                      /* протокол */
-    8,                      /* max размер пакета */
-    /* следующие два преобразования типа (cast) влияют только на первый байт константы, но
-     * это важно для того, чтобы избежать предупреждения (warning) с величинами по умолчанию.
+    0,                      /* protocol */
+    8,                      /* max packet size */
+    /* the following two casts affect the first byte of the constant only, but
+     * that's sufficient to avoid a warning with the default values.
      */
-    (char)USB_CFG_VENDOR_ID,	/* 2 байта */
-    (char)USB_CFG_DEVICE_ID,	/* 2 байта */
-    USB_CFG_DEVICE_VERSION, 	/* 2 байта */
-    USB_CFG_DESCR_PROPS_STRING_VENDOR != 0 ? 1 : 0,         /* индекс строки производителя */
-    USB_CFG_DESCR_PROPS_STRING_PRODUCT != 0 ? 2 : 0,        /* индекс строки продукта */
-    USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER != 0 ? 3 : 0,  /* индекс строки серийного номера */
-    1,          																						/* количество конфигураций */
+    (char)USB_CFG_VENDOR_ID,/* 2 bytes */
+    (char)USB_CFG_DEVICE_ID,/* 2 bytes */
+    USB_CFG_DEVICE_VERSION, /* 2 bytes */
+    USB_CFG_DESCR_PROPS_STRING_VENDOR != 0 ? 1 : 0,         /* manufacturer string index */
+    USB_CFG_DESCR_PROPS_STRING_PRODUCT != 0 ? 2 : 0,        /* product string index */
+    USB_CFG_DESCR_PROPS_STRING_SERIAL_NUMBER != 0 ? 3 : 0,  /* serial number string index */
+    1,          /* number of configurations */
 };
 #endif
 
-/* ----------------------- Дескриптор конфигурации ------------------------ */
+/* ----------------------- Configuration Descriptor ------------------------ */
 
 #if USB_CFG_DESCR_PROPS_HID_REPORT != 0 && USB_CFG_DESCR_PROPS_HID == 0
 #undef USB_CFG_DESCR_PROPS_HID
-#define USB_CFG_DESCR_PROPS_HID     9   /* длина HID дескриптора в дескрипторе ниже */
+#define USB_CFG_DESCR_PROPS_HID     9   /* length of HID descriptor in config descriptor below */
 #endif
 
 #if USB_CFG_DESCR_PROPS_CONFIGURATION == 0
@@ -145,71 +144,62 @@ PROGMEM const char usbDescriptorConfiguration[] = {    /* USB дескриптор конфигу
     USBDESCR_CONFIG,    /* тип дескриптора */
     18 + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT + 7 * USB_CFG_HAVE_INTRIN_ENDPOINT3 +
                 (USB_CFG_DESCR_PROPS_HID & 0xff), 0,
-                /* общая длина возвращаемых данных (включая встроенные дескрипторы) */
-    1,          /* количество интерфейсов в этой конфигурации */
-    1,          /* индекс этой конфигурации */
-    0,          /* индекс строки имени конфигурации */
+                /* total length of data returned (including inlined descriptors) */
+    1,          /* number of interfaces in this configuration */
+    1,          /* index of this configuration */
+    0,          /* configuration name string index */
 #if USB_CFG_IS_SELF_POWERED
-    USBATTR_SELFPOWER,      /* атрибуты */
+    (1 << 7) | USBATTR_SELFPOWER,       /* attributes */
 #else
-    (char)USBATTR_BUSPOWER, /* атрибуты */
+    (1 << 7),                           /* attributes */
 #endif
-    USB_CFG_MAX_BUS_POWER/2,            /* max ток USB в единицах 2mA */
-/* дескриптор интерфейса следует встроенным (inline): */
-    9,          /* sizeof(usbDescrInterface): длина дескриптора в байтах */
-    USBDESCR_INTERFACE, /* тип дескриптора */
-    0,          /* индекс этого интерфейса */
-    0,          /* альтернативная установка этого интерфейса */
-    USB_CFG_HAVE_INTRIN_ENDPOINT + USB_CFG_HAVE_INTRIN_ENDPOINT3, /* конечные точки за исключением 0: количество следующих описателей конечных точек */
+    USB_CFG_MAX_BUS_POWER/2,            /* max USB current in 2mA units */
+/* interface descriptor follows inline: */
+    9,          /* sizeof(usbDescrInterface): length of descriptor in bytes */
+    USBDESCR_INTERFACE, /* descriptor type */
+    0,          /* index of this interface */
+    0,          /* alternate setting for this interface */
+    USB_CFG_HAVE_INTRIN_ENDPOINT + USB_CFG_HAVE_INTRIN_ENDPOINT3, /* endpoints excl 0: number of endpoint descriptors to follow */
     USB_CFG_INTERFACE_CLASS,
     USB_CFG_INTERFACE_SUBCLASS,
     USB_CFG_INTERFACE_PROTOCOL,
-    0,          /* индекс строки для интерфейса */
-#if (USB_CFG_DESCR_PROPS_HID & 0xff)    /* HID дескриптор */
-    9,          /* sizeof(usbDescrHID): длина дескриптора в байтах */
-    USBDESCR_HID,   /* тип дескриптора: HID */
-    0x01, 0x01, /* BCD представление версии HID */
-    0x00,       /* код целевой страны */
-    0x01,       /* номер следующего дескриптора информационного репорта HID (или другого класса HID) */
-    0x22,       /* тип дескриптора: репорт */
-    USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH, 0,  /* общая длина дескриптора репорта */
+    0,          /* string index for interface */
+#if (USB_CFG_DESCR_PROPS_HID & 0xff)    /* HID descriptor */
+    9,          /* sizeof(usbDescrHID): length of descriptor in bytes */
+    USBDESCR_HID,   /* descriptor type: HID */
+    0x01, 0x01, /* BCD representation of HID version */
+    0x00,       /* target country code */
+    0x01,       /* number of HID Report (or other HID class) Descriptor infos to follow */
+    0x22,       /* descriptor type: report */
+    USB_CFG_HID_REPORT_DESCRIPTOR_LENGTH, 0,  /* total length of report descriptor */
 #endif
-#if USB_CFG_HAVE_INTRIN_ENDPOINT    /* дескриптор конечной точки для конечной точки 1 */
+#if USB_CFG_HAVE_INTRIN_ENDPOINT    /* endpoint descriptor for endpoint 1 */
     7,          /* sizeof(usbDescrEndpoint) */
-    USBDESCR_ENDPOINT,  /* тип дескриптора = конечная точка */
-    (char)0x81, /* IN endpoint номер 1 */
-    0x03,       /* атрибут: конечная точка с прерыванием */
-    8, 0,       /* max размер пакета */
-    USB_CFG_INTR_POLL_INTERVAL, /* в ms */
+    USBDESCR_ENDPOINT,  /* descriptor type = endpoint */
+    (char)0x81, /* IN endpoint number 1 */
+    0x03,       /* attrib: Interrupt endpoint */
+    8, 0,       /* maximum packet size */
+    USB_CFG_INTR_POLL_INTERVAL, /* in ms */
 #endif
-#if USB_CFG_HAVE_INTRIN_ENDPOINT3   /* дескриптор конечной точки для конечной точки 3 */
+#if USB_CFG_HAVE_INTRIN_ENDPOINT3   /* endpoint descriptor for endpoint 3 */
     7,          /* sizeof(usbDescrEndpoint) */
-    USBDESCR_ENDPOINT,  /* тип дескриптора = конечная точка */
-    (char)0x83, /* IN endpoint номер 3 */
-    0x03,       /* атрибут: конечная точка с прерыванием */
-    8, 0,       /* max размер пакета */
-    USB_CFG_INTR_POLL_INTERVAL, /* в ms */
+    USBDESCR_ENDPOINT,  /* descriptor type = endpoint */
+    (char)(0x80 | USB_CFG_EP3_NUMBER), /* IN endpoint number 3 */
+    0x03,       /* attrib: Interrupt endpoint */
+    8, 0,       /* maximum packet size */
+    USB_CFG_INTR_POLL_INTERVAL, /* in ms */
 #endif
 };
 #endif
 
 /* ------------------------------------------------------------------------- */
 
-/* Мы не используем prog_int или prog_int16_t для совместимости с различными 
- *  версиями libc. Здесь используется другой хак для совместимости:
- */
-#ifndef PRG_RDB
-#define PRG_RDB(addr)   pgm_read_byte(addr)
-#endif
-
-/* ------------------------------------------------------------------------- */
-
 static inline void  usbResetDataToggling(void)
 {
-#if USB_CFG_HAVE_INTRIN_ENDPOINT
-    USB_SET_DATATOKEN1(USB_INITIAL_DATATOKEN);  /* сброс переключения данных для конечной точки прерывания */
+#if USB_CFG_HAVE_INTRIN_ENDPOINT && !USB_CFG_SUPPRESS_INTR_CODE
+    USB_SET_DATATOKEN1(USB_INITIAL_DATATOKEN);  /* reset data toggling for interrupt endpoint */
 #   if USB_CFG_HAVE_INTRIN_ENDPOINT3
-    USB_SET_DATATOKEN3(USB_INITIAL_DATATOKEN);  /* сброс переключения данных для конечной точки прерывания */
+    USB_SET_DATATOKEN3(USB_INITIAL_DATATOKEN);  /* reset data toggling for interrupt endpoint */
 #   endif
 #endif
 }
@@ -226,6 +216,7 @@ static inline void  usbResetStall(void)
 
 /* ------------------------------------------------------------------------- */
 
+#if !USB_CFG_SUPPRESS_INTR_CODE
 #if USB_CFG_HAVE_INTRIN_ENDPOINT
 static void usbGenericSetInterrupt(uchar *data, uchar len, usbTxStatus_t *txStatus)
 {
@@ -236,18 +227,18 @@ char    i;
     if(usbTxLen1 == USBPID_STALL)
         return;
 #endif
-    if(txStatus->len & 0x10){   /* буфер пакета был пуст */
-        txStatus->buffer[0] ^= USBPID_DATA0 ^ USBPID_DATA1; /* переключение токена */
+    if(txStatus->len & 0x10){   /* packet buffer was empty */
+        txStatus->buffer[0] ^= USBPID_DATA0 ^ USBPID_DATA1; /* toggle token */
     }else{
-        txStatus->len = USBPID_NAK; /* избегаем отправки неактуальных (перезаписанных) данных прерывания */
+        txStatus->len = USBPID_NAK; /* avoid sending outdated (overwritten) interrupt data */
     }
     p = txStatus->buffer + 1;
     i = len;
-    do{                         /* если len == 0, мы все равно копируем 1 байт, но это не проблема */
+    do{                         /* if len == 0, we still copy 1 byte, but that's no problem */
         *p++ = *data++;
-    }while(--i > 0);            /* управление циклом в конце составляет на 2 байта короче, чем в начале */
+    }while(--i > 0);            /* loop control at the end is 2 bytes shorter than at beginning */
     usbCrc16Append(&txStatus->buffer[1], len);
-    txStatus->len = len + 4;    /* len должна включать байт синхронизации (sync byte) */
+    txStatus->len = len + 4;    /* len must be given including sync byte */
     DBG2(0x21 + (((int)txStatus >> 3) & 3), txStatus->buffer, len + 3);
 }
 
@@ -263,12 +254,14 @@ USB_PUBLIC void usbSetInterrupt3(uchar *data, uchar len)
     usbGenericSetInterrupt(data, len, &usbTxStatus3);
 }
 #endif
+#endif /* USB_CFG_SUPPRESS_INTR_CODE */
 
-/* ------------------ утилиты для кода, следующего далее ------------------- */
+/* ------------------ utilities for code following below ------------------- */
 
-/* Испельзуйте операторы define для оператора switch statement, можно выбрать между
- *  реализациями if()else if() и switch/case. Оператор switch() более эффективен
- *  для БОЛЬШИХ последовательностей выбора, if() лучше в других случаях.
+/* Use defines for the switch statement so that we can choose between an
+ * if()else if() and a switch/case based implementation. switch() is more
+ * efficient for a LARGE set of sequential choices, if() is better in all other
+ * cases.
  */
 #if USB_CFG_USE_SWITCH_STATEMENT
 #   define SWITCH_START(cmd)       switch(cmd){{
@@ -295,10 +288,10 @@ USB_PUBLIC void usbSetInterrupt3(uchar *data, uchar len)
 
 /* ------------------------------------------------------------------------- */
 
-/* Мы используем if() вместо #if в макросе далее, потому что #if не может использоваться
- *  в макросе и компилятор так или иначе оптимизирует константы.
- * Это может создавать проблемы с неопределенными символами (undefined symbols), если 
- *  компиляция происходит без оптимизации!
+/* We use if() instead of #if in the macro below because #if can't be used
+ * in macros and the compiler optimizes constant conditions anyway.
+ * This may cause problems with undefined symbols if compiled without
+ * optimizing!
  */
 #define GET_DESCRIPTOR(cfgProp, staticName)         \
     if(cfgProp){                                    \
@@ -312,8 +305,8 @@ USB_PUBLIC void usbSetInterrupt3(uchar *data, uchar len)
         }                                           \
     }
 
-/* usbDriverDescriptor() эквивалентна usbFunctionDescriptor(), но используется
- * внутренне для всех типов дескрипторов.
+/* usbDriverDescriptor() is similar to usbFunctionDescriptor(), but used
+ * internally for all types of descriptors.
  */
 static inline usbMsgLen_t usbDriverDescriptor(usbRequest_t *rq)
 {
@@ -346,7 +339,7 @@ uchar       flags = USB_FLG_MSGPTR_IS_ROM;
             }
         SWITCH_END
 #endif  /* USB_CFG_DESCR_PROPS_STRINGS & USB_PROP_IS_DYNAMIC */
-#if USB_CFG_DESCR_PROPS_HID_REPORT  /* если разрешено, поддерживает только дескрипторы HID */
+#if USB_CFG_DESCR_PROPS_HID_REPORT  /* only support HID descriptors if enabled */
     SWITCH_CASE(USBDESCR_HID)       /* 0x21 */
         GET_DESCRIPTOR(USB_CFG_DESCR_PROPS_HID, usbDescriptorConfiguration + 18)
     SWITCH_CASE(USBDESCR_HID_REPORT)/* 0x22 */
@@ -363,32 +356,33 @@ uchar       flags = USB_FLG_MSGPTR_IS_ROM;
 
 /* ------------------------------------------------------------------------- */
 
-/* usbDriverSetup() эквивалентна usbFunctionSetup(), но используется для 
- * стандартных запросов вместо класса и стандартных запросов.
+/* usbDriverSetup() is similar to usbFunctionSetup(), but it's used for
+ * standard requests instead of class and custom requests.
  */
 static inline usbMsgLen_t usbDriverSetup(usbRequest_t *rq)
 {
-uchar   len  = 0, *dataPtr = usbTxBuf + 9;  /* здесь 2 байта свободного пространства в конце буфера */
+usbMsgLen_t len = 0;
+uchar   *dataPtr = usbTxBuf + 9;    /* there are 2 bytes free space at the end of the buffer */
 uchar   value = rq->wValue.bytes[0];
 #if USB_CFG_IMPLEMENT_HALT
 uchar   index = rq->wIndex.bytes[0];
 #endif
 
-    dataPtr[0] = 0; /* общий ответ по умолчанию на USBRQ_GET_STATUS и USBRQ_GET_INTERFACE */
+    dataPtr[0] = 0; /* default reply common to USBRQ_GET_STATUS and USBRQ_GET_INTERFACE */
     SWITCH_START(rq->bRequest)
     SWITCH_CASE(USBRQ_GET_STATUS)           /* 0 */
-        uchar recipient = rq->bmRequestType & USBRQ_RCPT_MASK;  /* назначьте арифметический ops переменным, чтобы предписать размер в байтах */
+        uchar recipient = rq->bmRequestType & USBRQ_RCPT_MASK;  /* assign arith ops to variables to enforce byte size */
         if(USB_CFG_IS_SELF_POWERED && recipient == USBRQ_RCPT_DEVICE)
             dataPtr[0] =  USB_CFG_IS_SELF_POWERED;
 #if USB_CFG_IMPLEMENT_HALT
-        if(recipient == USBRQ_RCPT_ENDPOINT && index == 0x81)   /* запрос статуса для конечной точки 1 */
+        if(recipient == USBRQ_RCPT_ENDPOINT && index == 0x81)   /* request status for endpoint 1 */
             dataPtr[0] = usbTxLen1 == USBPID_STALL;
 #endif
         dataPtr[1] = 0;
         len = 2;
 #if USB_CFG_IMPLEMENT_HALT
     SWITCH_CASE2(USBRQ_CLEAR_FEATURE, USBRQ_SET_FEATURE)    /* 1, 3 */
-        if(value == 0 && index == 0x81){    /* особенность (feature) 0 == HALT для конечной точки == 1 */
+        if(value == 0 && index == 0x81){    /* feature 0 == HALT for endpoint == 1 */
             usbTxLen1 = rq->bRequest == USBRQ_CLEAR_FEATURE ? USBPID_NAK : USBPID_STALL;
             usbResetDataToggling();
         }
@@ -400,20 +394,20 @@ uchar   index = rq->wIndex.bytes[0];
         len = usbDriverDescriptor(rq);
         goto skipMsgPtrAssignment;
     SWITCH_CASE(USBRQ_GET_CONFIGURATION)    /* 8 */
-        dataPtr = &usbConfiguration;  /* отправка величины текущей конфигурации */
+        dataPtr = &usbConfiguration;  /* send current configuration value */
         len = 1;
     SWITCH_CASE(USBRQ_SET_CONFIGURATION)    /* 9 */
         usbConfiguration = value;
         usbResetStall();
     SWITCH_CASE(USBRQ_GET_INTERFACE)        /* 10 */
         len = 1;
-#if USB_CFG_HAVE_INTRIN_ENDPOINT
+#if USB_CFG_HAVE_INTRIN_ENDPOINT && !USB_CFG_SUPPRESS_INTR_CODE
     SWITCH_CASE(USBRQ_SET_INTERFACE)        /* 11 */
         usbResetDataToggling();
         usbResetStall();
 #endif
     SWITCH_DEFAULT                          /* 7=SET_DESCRIPTOR, 12=SYNC_FRAME */
-        /* Должны мы добавить здесь дополнительный хук? */
+        /* Should we add an optional hook here? */
     SWITCH_END
     usbMsgPtr = dataPtr;
 skipMsgPtrAssignment:
@@ -422,65 +416,69 @@ skipMsgPtrAssignment:
 
 /* ------------------------------------------------------------------------- */
 
-/* usbProcessRx() вызывается для каждого сообщения, принятого подпрограммой
- *  прерывания. Она различает пакеты SETUP и DATA и обрабатывает их 
- *  соответственно.
+/* usbProcessRx() is called for every message received by the interrupt
+ * routine. It distinguishes between SETUP and DATA packets and processes
+ * them accordingly.
  */
 static inline void usbProcessRx(uchar *data, uchar len)
 {
 usbRequest_t    *rq = (void *)data;
 
-/* usbRxToken может быть:
- * 0x2d 00101101 (USBPID_SETUP для данных setup)
- * 0xe1 11100001 (USBPID_OUT: фаза данных передачи setup)
- * 0...0x0f для OUT на конечной точке X
+/* usbRxToken can be:
+ * 0x2d 00101101 (USBPID_SETUP for setup data)
+ * 0xe1 11100001 (USBPID_OUT: data phase of setup transfer)
+ * 0...0x0f for OUT on endpoint X
  */
-    DBG2(0x10 + (usbRxToken & 0xf), data, len); /* SETUP=1d, SETUP-DATA=11, OUTx=1x */
+    DBG2(0x10 + (usbRxToken & 0xf), data, len + 2); /* SETUP=1d, SETUP-DATA=11, OUTx=1x */
     USB_RX_USER_HOOK(data, len)
 #if USB_CFG_IMPLEMENT_FN_WRITEOUT
-    if(usbRxToken < 0x10){  /* OUT для конечной точки != 0: номер конечной точки находится в usbRxToken */
+    if(usbRxToken < 0x10){  /* OUT to endpoint != 0: endpoint number in usbRxToken */
         usbFunctionWriteOut(data, len);
         return;
     }
 #endif
     if(usbRxToken == (uchar)USBPID_SETUP){
-        if(len != 8)    /* Размер setup должен быть всегда 8 байт. Иначе игнорируется. */
+        if(len != 8)    /* Setup size must be always 8 bytes. Ignore otherwise. */
             return;
         usbMsgLen_t replyLen;
-        usbTxBuf[0] = USBPID_DATA0;         /* иницализируем переключение данных */
-        usbTxLen = USBPID_NAK;              /* прерываем ожидающую передачу */
+        usbTxBuf[0] = USBPID_DATA0;         /* initialize data toggling */
+        usbTxLen = USBPID_NAK;              /* abort pending transmit */
         usbMsgFlags = 0;
         uchar type = rq->bmRequestType & USBRQ_TYPE_MASK;
-        if(type != USBRQ_TYPE_STANDARD){    /* стандартные запросы обрабатыватся драйвером */
+        if(type != USBRQ_TYPE_STANDARD){    /* standard requests are handled by driver */
             replyLen = usbFunctionSetup(data);
         }else{
             replyLen = usbDriverSetup(rq);
         }
 #if USB_CFG_IMPLEMENT_FN_READ || USB_CFG_IMPLEMENT_FN_WRITE
-        if(replyLen == USB_NO_MSG){         /* используется предоставляемая пользователем функция чтения/записи */
-            /* делаем некоторое создание условий на replyLen */
+        if(replyLen == USB_NO_MSG){         /* use user-supplied read/write function */
+            /* do some conditioning on replyLen, but on IN transfers only */
             if((rq->bmRequestType & USBRQ_DIR_MASK) != USBRQ_DIR_HOST_TO_DEVICE){
-                replyLen = rq->wLength.bytes[0];    /* только передачи IN */
+                if(sizeof(replyLen) < sizeof(rq->wLength.word)){ /* help compiler with optimizing */
+                    replyLen = rq->wLength.bytes[0];
+                }else{
+                    replyLen = rq->wLength.word;
+                }
             }
             usbMsgFlags = USB_FLG_USE_USER_RW;
-        }else   /* 'else' предотвращает лимит replyLen USB_NO_MSG для максимальной длины передачи. */
+        }else   /* The 'else' prevents that we limit a replyLen of USB_NO_MSG to the maximum transfer len. */
 #endif
-        if(sizeof(replyLen) < sizeof(rq->wLength.word)){ /* помогаем компилятору с оптимизацией */
-            if(!rq->wLength.bytes[1] && replyLen > rq->wLength.bytes[0])    /* ограничить длину до max */
+        if(sizeof(replyLen) < sizeof(rq->wLength.word)){ /* help compiler with optimizing */
+            if(!rq->wLength.bytes[1] && replyLen > rq->wLength.bytes[0])    /* limit length to max */
                 replyLen = rq->wLength.bytes[0];
         }else{
-            if(replyLen > rq->wLength.word)     														/* ограничить длину до max */
+            if(replyLen > rq->wLength.word)     /* limit length to max */
                 replyLen = rq->wLength.word;
         }
         usbMsgLen = replyLen;
-    }else{  /* usbRxToken должен быть USBPID_OUT, что означает фазу данных setup (control-out) */
+    }else{  /* usbRxToken must be USBPID_OUT, which means data phase of setup (control-out) */
 #if USB_CFG_IMPLEMENT_FN_WRITE
         if(usbMsgFlags & USB_FLG_USE_USER_RW){
             uchar rval = usbFunctionWrite(data, len);
-            if(rval == 0xff){   /* произошла ошибка */
+            if(rval == 0xff){   /* an error occurred */
                 usbTxLen = USBPID_STALL;
-            }else if(rval != 0){    /* Это последний пакет */
-                usbMsgLen = 0;  /* ответ пакетом нулевой длины */
+            }else if(rval != 0){    /* This was the final package */
+                usbMsgLen = 0;  /* answer with a zero-sized data packet */
             }
         }
 #endif
@@ -489,12 +487,12 @@ usbRequest_t    *rq = (void *)data;
 
 /* ------------------------------------------------------------------------- */
 
-/* Эта функция эквивалентна usbFunctionRead(), но она также вызывается для 
- *  данных, автоматически обрабатываемых драйвером (например, чтение дескриптора).
+/* This function is similar to usbFunctionRead(), but it's also called for
+ * data handled automatically by the driver (e.g. descriptor reads).
  */
 static uchar usbDeviceRead(uchar *data, uchar len)
 {
-    if(len > 0){    /* не беспокоим приложение чтениями нулевого размера */
+    if(len > 0){    /* don't bother app with 0 sized reads */
 #if USB_CFG_IMPLEMENT_FN_READ
         if(usbMsgFlags & USB_FLG_USE_USER_RW){
             len = usbFunctionRead(data, len);
@@ -502,13 +500,13 @@ static uchar usbDeviceRead(uchar *data, uchar len)
 #endif
         {
             uchar i = len, *r = usbMsgPtr;
-            if(usbMsgFlags & USB_FLG_MSGPTR_IS_ROM){    /* данные ROM */
+            if(usbMsgFlags & USB_FLG_MSGPTR_IS_ROM){    /* ROM data */
                 do{
-                    uchar c = PRG_RDB(r);    /* назначаем переменную char для включения байтовых операций */
+                    uchar c = USB_READ_FLASH(r);    /* assign to char size variable to enforce byte ops */
                     *data++ = c;
                     r++;
                 }while(--i);
-            }else{  /* данные RAM */
+            }else{  /* RAM data */
                 do{
                     *data++ = *r++;
                 }while(--i);
@@ -521,8 +519,8 @@ static uchar usbDeviceRead(uchar *data, uchar len)
 
 /* ------------------------------------------------------------------------- */
 
-/* usbBuildTxBlock() вызывается, когда мы имеем данные для передачи, и когда
- *  опустошается буфер передачи подпрограммы прерывания.
+/* usbBuildTxBlock() is called when we have data to transmit and the
+ * interrupt routine's transmit buffer is empty.
  */
 static inline void usbBuildTxBlock(void)
 {
@@ -533,15 +531,15 @@ uchar       len;
     if(wantLen > 8)
         wantLen = 8;
     usbMsgLen -= wantLen;
-    usbTxBuf[0] ^= USBPID_DATA0 ^ USBPID_DATA1; /* переключение DATA */
+    usbTxBuf[0] ^= USBPID_DATA0 ^ USBPID_DATA1; /* DATA toggling */
     len = usbDeviceRead(usbTxBuf + 1, wantLen);
-    if(len <= 8){           /* допустимый пакет данных */
+    if(len <= 8){           /* valid data packet */
         usbCrc16Append(&usbTxBuf[1], len);
-        len += 4;           /* длина включая байт sync */
-        if(len < 12)        /* часть пакета идентифицирует конец сообщения */
+        len += 4;           /* length including sync byte */
+        if(len < 12)        /* a partial package identifies end of message */
             usbMsgLen = USB_NO_MSG;
     }else{
-        len = USBPID_STALL;   /* остановка конечной точки */
+        len = USBPID_STALL;   /* stall the endpoint */
         usbMsgLen = USB_NO_MSG;
     }
     usbTxLen = len;
@@ -560,6 +558,8 @@ uchar           isReset = !notResetState;
         USB_RESET_HOOK(isReset);
         wasReset = isReset;
     }
+#else
+    notResetState = notResetState;  // avoid compiler warning
 #endif
 }
 
@@ -572,36 +572,36 @@ uchar   i;
 
     len = usbRxLen - 3;
     if(len >= 0){
-/* Здесь мы должны проверить CRC16 -- но ACK все равно отсылается. Если Вам
- *  необходима проверка целостности данных в этом драйвере, проверяйте CRC в коде Вашего
- *  приложения и сообщайте об ошибках обратно хосту. Поскольку ACK отсылается по-любому,
- *  повторы при ошибках должны быть обработаны на уровне приложения.
+/* We could check CRC16 here -- but ACK has already been sent anyway. If you
+ * need data integrity checks with this driver, check the CRC in your app
+ * code and report errors back to the host. Since the ACK was already sent,
+ * retries must be handled on application level.
  * unsigned crc = usbCrc16(buffer + 1, usbRxLen - 3);
  */
         usbProcessRx(usbRxBuf + USB_BUFSIZE + 1 - usbInputBufOffset, len);
 #if USB_CFG_HAVE_FLOWCONTROL
-        if(usbRxLen > 0)    /* если не деактивировано, доступен только mark */
+        if(usbRxLen > 0)    /* only mark as available if not inactivated */
             usbRxLen = 0;
 #else
-        usbRxLen = 0;       /* mark rx буфер как доступно */
+        usbRxLen = 0;       /* mark rx buffer as available */
 #endif
     }
-    if(usbTxLen & 0x10){    /* передача system idle */
-        if(usbMsgLen != USB_NO_MSG){    /* данные для передачи в ожидании? */
+    if(usbTxLen & 0x10){    /* transmit system idle */
+        if(usbMsgLen != USB_NO_MSG){    /* transmit data pending? */
             usbBuildTxBlock();
         }
     }
-    for(i = 10; i > 0; i--){
+    for(i = 20; i > 0; i--){
         uchar usbLineStatus = USBIN & USBMASK;
-        if(usbLineStatus != 0)  /* SE0 завершился */
-            break;
+        if(usbLineStatus != 0)  /* SE0 has ended */
+            goto isNotReset;
     }
-    if(i == 0){ /* состояние RESET, вызывается несколько раз во время сброса */
-        usbNewDeviceAddr = 0;
-        usbDeviceAddr = 0;
-        usbResetStall();
-        DBG1(0xff, 0, 0);
-    }
+    /* RESET condition, called multiple times during reset */
+    usbNewDeviceAddr = 0;
+    usbDeviceAddr = 0;
+    usbResetStall();
+    DBG1(0xff, 0, 0);
+isNotReset:
     usbHandleResetHook(i);
 }
 
@@ -617,7 +617,7 @@ USB_PUBLIC void usbInit(void)
 #endif
     USB_INTR_ENABLE |= (1 << USB_INTR_ENABLE_BIT);
     usbResetDataToggling();
-#if USB_CFG_HAVE_INTRIN_ENDPOINT
+#if USB_CFG_HAVE_INTRIN_ENDPOINT && !USB_CFG_SUPPRESS_INTR_CODE
     usbTxLen1 = USBPID_NAK;
 #if USB_CFG_HAVE_INTRIN_ENDPOINT3
     usbTxLen3 = USBPID_NAK;
