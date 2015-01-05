@@ -166,10 +166,13 @@
  * ¬аших действий. ќдно из возможных применений (кроме отладки) - мигание
  * статусным светодиодом при каждом пакете.
  */
-/* #define USB_RESET_HOOK(resetStarts)     if(!resetStarts){hadUsbReset();} */
-/* Ётот macro €вл€етс€ хуком дл€ обработки событи€ USB RESET. ќн имеет один
- * параметр, позвол€ющий отличать старт состо€ни€ RESET от окончани€
- * состо€ни€ RESET.
+#define USB_RESET_HOOK(resetStarts)     if(!resetStarts){hadUsbReset();}
+#ifndef __ASSEMBLER__
+extern void hadUsbReset(void); // define the function for usbdrv.c
+#endif
+
+/* Ётот macro €вл€етс€ хуком дл€ обработки событи€ USB RESET. ќн имеет один параметр, позвол€ющий
+   отличать старт состо€ни€ RESET от окончани€ состо€ни€ RESET.
  */
 /* #define USB_SET_ADDRESS_HOOK()              hadAddressAssigned(); */
 /* Ётот macro (если задан) выполн€етс€ когда прин€т запрос USB SET_ADDRESS.
@@ -206,7 +209,7 @@
  * usbCurrentDataToken и статическую переменную дл€ каждого 
  * control- и out-endpoint дл€ проверки на повтор€ющиес€ пакеты.
  */
-#define USB_CFG_HAVE_MEASURE_FRAME_LENGTH   0
+#define USB_CFG_HAVE_MEASURE_FRAME_LENGTH   1
 /* «адайте здесь 1, если ¬ам нужна функци€ usbMeasureFrameLength() - тогда она
  * скомпилируетс€. Ёта функци€ может использоватьс€ дл€ подстройки генератора
  * RC микроконтроллера AVR.
@@ -228,7 +231,7 @@
  * противном случае используйте одну из свободно предоставл€емых пар
  * VID/PID obdev. ѕрочитайте правила USB-IDs-for-free.txt!
  */
-#define  USB_CFG_DEVICE_ID       0xdf, 0x05 /* obdev's shared PID for HIDs */
+#define  USB_CFG_DEVICE_ID       0xdb, 0x05 /* предоставленный в общее пользование obdev PID дл€ устройств HID */
 /* Ёто ID продукта, младший байт идет первым. ќн интерпретируетс€ в контексте
  * vendor ID. ≈сли ¬ы зарегистрировали свой собственный VID на usb.org, или
  * если пользуетесь лицензией на PID от кого-нибудь еще, укажите его здесь.
@@ -248,7 +251,7 @@
  * доменное им€ Internet, если ¬ы используете свободно распростран€емую пару
  * obdev VID/PID. «а детал€ми обращайтесь к файлу USB-IDs-for-free.txt.
  */
-#define USB_CFG_DEVICE_NAME     'L', 'E', 'D', 'C', 't', 'l', 'H', 'I', 'D'
+#define USB_CFG_DEVICE_NAME     'B', 'U', 'I', 'L', 'D', '.', 'O', 'R', 'B'
 #define USB_CFG_DEVICE_NAME_LEN 9
 /* «десь указываетс€ им€ устройства (device name) таким же способом, как и в
  * предыдущем параметре указываетс€ им€ вендора. ≈сли ¬ам не нужно им€

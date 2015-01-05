@@ -17,7 +17,8 @@ namespace VUSBProba
     public partial class Form1 : Form
     {
         public static UsbDevice MyUsbDevice;
-        public static UsbDeviceFinder MyUsbFinder = new UsbDeviceFinder(0x16c0, 0x05df);
+        public static UsbDeviceFinder MyUsbFinder =
+            new UsbDeviceFinder(0x16C0, 0x05DB); // specify vendor, product id
                
         
         public Form1()

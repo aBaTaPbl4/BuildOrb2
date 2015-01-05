@@ -24,7 +24,7 @@ usbconfig.h для использования других ножек I/O USB. �
 /* ----------------------------- интерфейс USB ----------------------------- */
 /* ------------------------------------------------------------------------- */
 
-PROGMEM char usbHidReportDescriptor[22] = {    /* дескриптор репорта USB */
+PROGMEM const char usbHidReportDescriptor[22] = {    /* дескриптор репорта USB */
     0x06, 0x00, 0xff,              // USAGE_PAGE (Generic Desktop)
     0x09, 0x01,                    // USAGE (Vendor Usage 1)
     0xa1, 0x01,                    // COLLECTION (Application)

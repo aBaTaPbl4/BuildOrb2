@@ -17,7 +17,7 @@ struct dataexchange_t       // Описание структуры для передачи данных
                     // Для наглядности прикрутить по светодиоду и созерцать :)
 
 
-struct dataexchange_t pdata = {0, 0, 0};
+struct dataexchange_t pdata = {1, 0, 0};
 	
 #define RED_BIT 3
 #define GREEN_BIT 4
