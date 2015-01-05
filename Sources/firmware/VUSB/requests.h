@@ -31,4 +31,5 @@
  *  бите 0 байта.
  */
 
+#define CUSTOM_RQ_GET_PORT_STATUS    3
 #endif /* __REQUESTS_H_INCLUDED__ */

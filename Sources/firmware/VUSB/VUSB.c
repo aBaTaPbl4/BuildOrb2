@@ -8,9 +8,13 @@ usbconfig.h для использования других ножек I/O USB. �
 */
 #define LED_PORT_DDR        DDRB
 #define LED_PORT_OUTPUT     PORTB
-#define RED_BIT               3
+#define RED_BIT               3 
 #define GREEN_BIT             4
 #define BLUE_BIT              0
+
+#define RED_BIT_IN_PACKET	  1
+#define GREEN_BIT_IN_PACKET   2
+#define BLUE_BIT_IN_PACKET    4
 
 #include <avr/io.h>
 #include <avr/wdt.h>
@@ -47,49 +51,67 @@ PROGMEM const char usbHidReportDescriptor[22] = {    /* дескриптор р�
 
 usbMsgLen_t usbFunctionSetup(uchar data[8])
 {
-	LED_PORT_OUTPUT |= _BV(BLUE_BIT);
-	return 1;
-	
-usbRequest_t    *rq = (void *)data;
-
-    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_VENDOR){
+	usbRequest_t    *rq = (void *)data;
+	//LED_PORT_OUTPUT |= _BV(BLUE_BIT);
+	//return 1;	
+    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_VENDOR)
+	{
         //DBG1(0x50, &rq->bRequest, 1);   /* отладочный вывод: печатаем наш запрос */
-        if(rq->bRequest == CUSTOM_RQ_SET_STATUS){			
+        if(rq->bRequest == CUSTOM_RQ_SET_STATUS)
+		{			
 			uchar colorByte = rq->wValue.bytes[0];
-            if(colorByte & 1){    /* установить LED */
+            if((colorByte & RED_BIT_IN_PACKET) != 0)
+			{/* установить LED */
                 LED_PORT_OUTPUT |= _BV(RED_BIT);
-            }else{                          /* очистить LED */
+            }
+			else
+			{/* очистить LED */
                 LED_PORT_OUTPUT &= ~_BV(RED_BIT);
             }
-            if(colorByte & 2){    /* установить LED */
+            if((colorByte & GREEN_BIT_IN_PACKET) != 0)
+			{/* установить LED */
 	            LED_PORT_OUTPUT |= _BV(GREEN_BIT);
-	            }else{                          /* очистить LED */
-	            LED_PORT_OUTPUT &= ~_BV(GREEN_BIT);
+	        } 
+			else
+			{/* очистить LED */
+	            LED_PORT_OUTPUT &= ~_BV(GREEN_BIT);				
             }			
-            if(colorByte & 4){    /* установить LED */
+            if((colorByte & BLUE_BIT_IN_PACKET) != 0)
+			{/* установить LED */
 	            LED_PORT_OUTPUT |= _BV(BLUE_BIT);
-	            }else{                          /* очистить LED */
+	        }
+			else
+			{/* очистить LED */
 	            LED_PORT_OUTPUT &= ~_BV(BLUE_BIT);
             }			
-        }else if(rq->bRequest == CUSTOM_RQ_GET_STATUS){
+        }
+		else if(rq->bRequest == CUSTOM_RQ_GET_STATUS)
+		{
             static uchar dataBuffer[1];     /* буфер должен оставаться валидным привыходе из usbFunctionSetup */
-			dataBuffer[0] = 0;
+			dataBuffer[0] = 0x00;
 			if ((LED_PORT_OUTPUT & _BV(RED_BIT)) != 0)
 			{
-				dataBuffer[0] = 1;
+				dataBuffer[0] = RED_BIT_IN_PACKET;
 			}
 			if ((LED_PORT_OUTPUT & _BV(GREEN_BIT)) != 0)
 			{
-				dataBuffer[0] += 2;
+				dataBuffer[0] += GREEN_BIT_IN_PACKET;
 			}			
 			if ((LED_PORT_OUTPUT & _BV(BLUE_BIT)) != 0)
 			{
-				dataBuffer[0] += 4;
+				dataBuffer[0] += BLUE_BIT_IN_PACKET;
 			}			            
             usbMsgPtr = dataBuffer;         /* говорим драйверу, какие данные вернуть */
             return 1;                       /* говорим драйверу послать 1 байт */
         }
-    }else{
+		else if(rq->bRequest == CUSTOM_RQ_GET_PORT_STATUS)
+		{
+			usbMsgPtr = 0x00 | LED_PORT_OUTPUT;
+			return 1;		
+		}
+    }
+	else
+	{
         /* вызовы запросов USBRQ_HID_GET_REPORT и USBRQ_HID_SET_REPORT не реализованы,
          *  поскольку мы их не вызываем. Операционная система также не будет обращаться к ним, 
          *  потому что наш дескриптор не определяет никакого значения.
@@ -106,7 +128,6 @@ uchar   i;
 
 //DDRA = 0xff;
 //PORTA = 0xff;
-
     wdt_enable(WDTO_1S);
     /* Даже если Вы не используете сторожевой таймер (watchdog), выключите его здесь. На более новых 
      *  микроконтроллерах состояние watchdog (вкл\выкл, период) СОХРАНЯЕТСЯ ЧЕРЕЗ СБРОС!
@@ -125,12 +146,12 @@ uchar   i;
         _delay_ms(1);
     }
     usbDeviceConnect();
-    //LED_PORT_DDR |= _BV(GREEN_BIT);   /* делаем ножку, куда подключен LED, выходом */
+	uchar leds = _BV(RED_BIT) | _BV(GREEN_BIT) | _BV(BLUE_BIT);
+    LED_PORT_DDR |= leds;   /* ноги на которых висит светодиод конфигурируются как выходы(т.е. на них будем подавать напряжение, НО не принимать) */
     sei();
-    DBG1(0x01, 0, 0);       /* отладочный вывод: стартует цикл main */
     for(;;){                /* цикл событий main */
         wdt_reset();
-        usbPoll();
+        usbPoll();		
     }
     return 0;
 }

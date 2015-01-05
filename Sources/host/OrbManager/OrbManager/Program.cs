@@ -31,12 +31,12 @@ namespace OrbManager
                 // If the device is open and ready
                 if (MyUsbDevice == null) throw new Exception("Device Not Found.");
 
-                var orb = new BuildOrbDevice(argValues, MyUsbDevice);
+                var orb = new BuildOrbDevice(MyUsbDevice);
                 if (argValues.IsClientMode)
                 {
                     if (argValues.IsLocalMode)
                     {
-                        orb.TurnLightningOn();
+                        orb.TurnLightningOn(argValues.Color);
                     }
                     else
                     {
