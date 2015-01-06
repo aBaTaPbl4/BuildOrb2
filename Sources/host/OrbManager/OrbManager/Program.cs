@@ -31,6 +31,7 @@ namespace OrbManager
                     {
                         serverClient.Send(argValues.Color);
                         Console.WriteLine("\r\nDone!\r\n");
+                        return;
                     }                    
                 }
 
