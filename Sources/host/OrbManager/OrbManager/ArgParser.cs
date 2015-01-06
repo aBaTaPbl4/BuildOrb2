@@ -15,7 +15,7 @@ namespace OrbManager
         Blue,
         Yellow,
         White,
-        Unknown
+        None
     }
 
     public class ArgumentsParseException : ApplicationException
@@ -43,7 +43,7 @@ namespace OrbManager
             IsClientMode = false;
             IsLocalMode = true;
             ServerIp = null;
-            Color = OrbColor.Unknown;
+            Color = OrbColor.None;
             IsClientMode = !args.Any(x => x.StartsWith("/startServer:", true, CultureInfo.CurrentCulture));
             if (IsClientMode)
             {

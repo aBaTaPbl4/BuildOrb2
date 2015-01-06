@@ -60,28 +60,29 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
         if(rq->bRequest == CUSTOM_RQ_SET_STATUS)
 		{			
 			uchar colorByte = rq->wValue.bytes[0];
-            if((colorByte & RED_BIT_IN_PACKET) != 0)
-			{/* установить LED */
+			
+            if((colorByte & RED_BIT_IN_PACKET) == 0) //у нас светодиод с реверсом напряжения (у него все наооборот)
+			{/* очистить LED */
                 LED_PORT_OUTPUT |= _BV(RED_BIT);
             }
 			else
-			{/* очистить LED */
+			{/* установить LED */
                 LED_PORT_OUTPUT &= ~_BV(RED_BIT);
             }
-            if((colorByte & GREEN_BIT_IN_PACKET) != 0)
-			{/* установить LED */
+            if((colorByte & GREEN_BIT_IN_PACKET) == 0)
+			{
 	            LED_PORT_OUTPUT |= _BV(GREEN_BIT);
 	        } 
 			else
-			{/* очистить LED */
+			{
 	            LED_PORT_OUTPUT &= ~_BV(GREEN_BIT);				
             }			
-            if((colorByte & BLUE_BIT_IN_PACKET) != 0)
-			{/* установить LED */
+            if((colorByte & BLUE_BIT_IN_PACKET) == 0)
+			{
 	            LED_PORT_OUTPUT |= _BV(BLUE_BIT);
 	        }
 			else
-			{/* очистить LED */
+			{
 	            LED_PORT_OUTPUT &= ~_BV(BLUE_BIT);
             }			
         }
@@ -89,15 +90,15 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
 		{
             static uchar dataBuffer[1];     /* буфер должен оставаться валидным привыходе из usbFunctionSetup */
 			dataBuffer[0] = 0x00;
-			if ((LED_PORT_OUTPUT & _BV(RED_BIT)) != 0)
+			if ((LED_PORT_OUTPUT & _BV(RED_BIT)) == 0)
 			{
 				dataBuffer[0] = RED_BIT_IN_PACKET;
 			}
-			if ((LED_PORT_OUTPUT & _BV(GREEN_BIT)) != 0)
+			if ((LED_PORT_OUTPUT & _BV(GREEN_BIT)) == 0)
 			{
 				dataBuffer[0] += GREEN_BIT_IN_PACKET;
 			}			
-			if ((LED_PORT_OUTPUT & _BV(BLUE_BIT)) != 0)
+			if ((LED_PORT_OUTPUT & _BV(BLUE_BIT)) == 0)
 			{
 				dataBuffer[0] += BLUE_BIT_IN_PACKET;
 			}			            
@@ -148,6 +149,7 @@ uchar   i;
     usbDeviceConnect();
 	uchar leds = _BV(RED_BIT) | _BV(GREEN_BIT) | _BV(BLUE_BIT);
     LED_PORT_DDR |= leds;   /* ноги на которых висит светодиод конфигурируются как выходы(т.е. на них будем подавать напряжение, НО не принимать) */
+	LED_PORT_OUTPUT |= leds;
     sei();
     for(;;){                /* цикл событий main */
         wdt_reset();

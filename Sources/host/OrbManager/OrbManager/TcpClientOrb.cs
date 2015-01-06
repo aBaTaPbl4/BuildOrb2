@@ -12,7 +12,16 @@ namespace OrbManager
         public TcpClientOrb(ArgParser args, ColorToByteConverter converter)
         {
             _converter = converter;
-            _client = new TcpClient(args.ServerIp, args.PortNumber);
+            _client = new TcpClient();
+            var result = _client.BeginConnect(args.ServerIp, args.PortNumber, null, null);
+            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(2));
+            if (!success)
+            {
+                throw new ApplicationException(string.Format("Failed to connect to host {0} port {1}.", args.ServerIp, args.PortNumber));
+            }
+
+            // we have connected
+            _client.EndConnect(result);
         }
 
         public void Send(OrbColor color)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibUsbDotNet;
+﻿using LibUsbDotNet;
 using LibUsbDotNet.Main;
 
 namespace OrbManager
@@ -38,10 +33,7 @@ namespace OrbManager
         public void TurnLightningOff()
         {
             //Гасим
-            UsbSetupPacket packet = new UsbSetupPacket((byte)(UsbCtrlFlags.RequestType_Vendor | UsbCtrlFlags.Recipient_Device | UsbCtrlFlags.Direction_Out), 1, (short)0, 0, 0);
-            int countIn;
-            byte[] data = new byte[1];
-            _orbDevice.ControlTransfer(ref packet, data, 0, out countIn);            
+            TurnLightningOn(OrbColor.None);
         }
 
         public string ReadLightningState()
