@@ -22,11 +22,17 @@ namespace OrbManager
             //Зажигаем
             var converner = new ColorToByteConverter();
             byte colorByte = converner.Convert(color);
+            TurnLightningOn(colorByte);            
+        }
+
+        public void TurnLightningOn(byte colorByte)
+        {
+            //Зажигаем
             UsbSetupPacket packet = new UsbSetupPacket((byte)(UsbCtrlFlags.RequestType_Vendor | UsbCtrlFlags.Recipient_Device | UsbCtrlFlags.Direction_Out), 1, colorByte, 0, 0);
             int countIn;
             byte[] data = new byte[1];
             _orbDevice.ControlTransfer(ref packet, data, 0, out countIn);
-            
+
         }
 
         public void TurnLightningOff()

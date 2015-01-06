@@ -25,27 +25,30 @@ namespace OrbManager
             {
                 var argValues = new ArgParser(args);
 
+                if (argValues.IsRemoteClientMode)
+                {
+                    using (var serverClient = new TcpClientOrb(argValues, new ColorToByteConverter()))
+                    {
+                        serverClient.Send(argValues.Color);
+                        Console.WriteLine("\r\nDone!\r\n");
+                    }                    
+                }
+
                 // Find and open the usb device.
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
-
                 // If the device is open and ready
                 if (MyUsbDevice == null) throw new Exception("Device Not Found.");
 
                 var orb = new BuildOrbDevice(MyUsbDevice);
                 if (argValues.IsClientMode)
                 {
-                    if (argValues.IsLocalMode)
-                    {
-                        orb.TurnLightningOn(argValues.Color);
-                    }
-                    else
-                    {
-                        
-                    }
+                    orb.TurnLightningOn(argValues.Color);
                 }
                 else
                 {
-                    
+                    var server = new TcpServerOrb(argValues, orb);
+                    Console.WriteLine("Server was started on interface {0}", argValues.ServerIp);
+                    server.Start();
                 }
 
                 Console.WriteLine("\r\nDone!\r\n");
@@ -61,11 +64,6 @@ namespace OrbManager
                 {
                     if (MyUsbDevice.IsOpen)
                     {
-                        // If this is a "whole" usb device (libusb-win32, linux libusb-1.0)
-                        // it exposes an IUsbDevice interface. If not (WinUSB) the
-                        // 'wholeUsbDevice' variable will be null indicating this is
-                        // an interface of a device; it does not require or support
-                        // configuration and interface selection.
                         IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
                         if (!ReferenceEquals(wholeUsbDevice, null))
                         {
@@ -82,8 +80,6 @@ namespace OrbManager
 
                 }
 
-                // Wait for user input..
-                Console.ReadKey();
             }
         }
     }

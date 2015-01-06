@@ -67,6 +67,7 @@ namespace OrbManager
                 if (serverIpArg != null)
                 {
                     ServerIp = GetServerIp(serverIpArg);
+                    IsLocalMode = false;
                 }
                 PortNumber = GetPort(args);
             }
@@ -127,13 +128,19 @@ Parameters:
 Examples:
 'OrbManager /color:red'
 'OrbManager /startServer:192.168.0.1'
-'OrbManager.exe /startClient:192.168.0.1 /color:yellow'
+'OrbManager.exe /startClient:192.168.0.1 /color:white'
 ";
 
         public int PortNumber { get; private set; }
         public string ServerIp { get; private set; }
         public bool IsClientMode { get; private set; }
         public bool IsLocalMode { get; private set; }
+
+        public bool IsRemoteClientMode
+        {
+            get { return IsClientMode && !IsLocalMode; }
+        }
+
         public OrbColor Color { get; private set; }
     }
 
