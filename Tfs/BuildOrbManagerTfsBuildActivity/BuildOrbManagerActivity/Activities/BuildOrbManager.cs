@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Activities;
 using System.IO;
 using Microsoft.TeamFoundation.Build.Client;
+using Microsoft.TeamFoundation.Build.Workflow.Tracking;
+using Microsoft.TeamFoundation.Build.Workflow.Activities;
 
 namespace BuildOrbManagerTask.Activities
 {
@@ -23,17 +25,21 @@ namespace BuildOrbManagerTask.Activities
         
         protected override void Execute(CodeActivityContext context)
         {
+            LogMessage(context, "OrbManager activity started");
             IBuildDefinition buildDefinition = context.GetExtension<IBuildDefinition>();
+            LogMessage(context, "buildDefinition == null({0})", buildDefinition == null);
             string targetBuildDefinitionName = context.GetValue(this.TargetBuildDefinitionName);
 
             if (!string.Equals(buildDefinition.Name, targetBuildDefinitionName, StringComparison.CurrentCultureIgnoreCase))
             {
+                LogMessage(context, "Build orb supposed for over build definition. Exiting...");
                 return;
             }
 
             var curColor = DetectCurrentBuildColor(context);
             if (curColor == EColor.Unknown)
             {
+                LogMessage(context, "Unknown color suplied. Exiting...");
                 return;
             }
             
@@ -41,6 +47,7 @@ namespace BuildOrbManagerTask.Activities
 
             if (serverIps == null || serverIps.Count == 0)
             {
+                LogMessage(context, "ServerIps list is empty. Exiting...");
                 return;
             }
 
@@ -48,6 +55,7 @@ namespace BuildOrbManagerTask.Activities
 
             foreach (var serverIp in serverIps)
             {
+                LogMessage(context, "Connecting to server {0}...", serverIp);
                 string[] serverInfo = serverIp.Split(':');
                 string servIp;
                 string servPort = null;
@@ -69,8 +77,39 @@ namespace BuildOrbManagerTask.Activities
                 var orbClientProcess = new InteractiveProcess(orbManagerToolPath, args);
                 orbClientProcess.Start();
                 orbClientProcess.WaitForExit();
-                context.SetValue<string>(OrbClientOutput, orbClientProcess.Output);
+                LogMessage(context, "Orb client process output: {0}",  orbClientProcess.Output);
             }
+        }
+
+        private void LogMessage(CodeActivityContext context, string fmt, params object[] args)
+        {
+            LogMessage(BuildMessageImportance.Normal, context, fmt, args);
+        }
+
+        private void LogMessage(BuildMessageImportance logLevel, CodeActivityContext context, string fmt, params object[] args)
+        {
+            var msg = string.Format(fmt, args);
+            LogMessage(logLevel, context, msg);
+        }
+
+        private void LogMessage(CodeActivityContext context, string message)
+        {
+            LogMessage(BuildMessageImportance.Normal, context, message);
+        }
+
+        private void LogMessage(BuildMessageImportance logLevel, CodeActivityContext context, string message)
+        {
+            BuildInformationRecord<BuildMessage> record =
+             new BuildInformationRecord<BuildMessage>()
+             {
+                 Value = new BuildMessage()
+                 {
+                     Importance = logLevel,
+                     Message = message,
+                 },
+             };
+
+            context.Track(record);
         }
 
          private EColor GetColor(string colorPropertyValue, EColor defaultColor)
@@ -131,7 +170,6 @@ namespace BuildOrbManagerTask.Activities
         public InArgument<string> TestsFailedColor { get; set; }
         public InArgument<string> SuccessColor { get; set; }
         public InArgument<string> BuildRunningColor { get; set; }
-        public OutArgument<string> OrbClientOutput { get; set; }
 
 
     }
