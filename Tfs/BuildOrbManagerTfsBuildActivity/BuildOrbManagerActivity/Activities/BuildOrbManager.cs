@@ -11,12 +11,12 @@ namespace BuildOrbManagerTask.Activities
 
     enum EColor
     {
+        None = 0,
         Red,
         Green,
         Yellow,
         Blue,        
-        White,
-        Unknown
+        White
     }
 
      [BuildActivity(HostEnvironmentOption.All)]  
@@ -26,22 +26,22 @@ namespace BuildOrbManagerTask.Activities
         protected override void Execute(CodeActivityContext context)
         {
             LogMessage(context, "OrbManager activity started");
-            IBuildDefinition buildDefinition = context.GetExtension<IBuildDefinition>();
-            LogMessage(context, "buildDefinition == null({0})", buildDefinition == null);
+            IBuildDetail buildDetail = context.GetExtension<IBuildDetail>();
+            if (buildDetail == null)
+            {
+                LogMessage(BuildMessageImportance.High, context, "Error: Failed to get BuildDetail argument.");
+                return;
+            }
+                        
             string targetBuildDefinitionName = context.GetValue(this.TargetBuildDefinitionName);
 
-            if (!string.Equals(buildDefinition.Name, targetBuildDefinitionName, StringComparison.CurrentCultureIgnoreCase))
+            if (!string.Equals(buildDetail.BuildDefinition.Name, targetBuildDefinitionName, StringComparison.CurrentCultureIgnoreCase))
             {
-                LogMessage(context, "Build orb supposed for over build definition. Exiting...");
+                LogMessage(context, "Build orb supposed working for over build definition, than '{0}'. See BuildDefinitionName property for activity.  Exiting...", buildDetail.BuildDefinition.Name);
                 return;
             }
 
             var curColor = DetectCurrentBuildColor(context);
-            if (curColor == EColor.Unknown)
-            {
-                LogMessage(context, "Unknown color suplied. Exiting...");
-                return;
-            }
             
             List<string> serverIps = context.GetValue(this.ServerIps);
 
@@ -157,7 +157,7 @@ namespace BuildOrbManagerTask.Activities
                     case BuildPhaseStatus.Unknown:
                         return buildRunningColor;
             }
-            return EColor.Unknown;
+            return EColor.None;
         }
 
         [RequiredArgument]
