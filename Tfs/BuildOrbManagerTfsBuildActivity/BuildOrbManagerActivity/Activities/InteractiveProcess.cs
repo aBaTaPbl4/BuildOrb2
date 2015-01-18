@@ -36,7 +36,9 @@ namespace BuildOrbManagerTask.Activities
             _process.StartInfo.RedirectStandardInput = true;
             _process.StartInfo.Arguments = _args;
             _process.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
-            return _process.Start();
+            bool result = _process.Start();
+            _process.BeginOutputReadLine();
+            return result;
         }
 
         public void WaitForExit()

@@ -22,6 +22,7 @@ namespace BuildOrbManagerTask.Activities
      [BuildActivity(HostEnvironmentOption.All)]  
     public sealed class BuildOrbManager : CodeActivity
     {
+         private const string ExeName = @"OrbManager.exe";
         
         protected override void Execute(CodeActivityContext context)
         {
@@ -51,7 +52,7 @@ namespace BuildOrbManagerTask.Activities
                 return;
             }
 
-            string orbManagerToolPath = Path.Combine(context.GetValue(this.BuildOrbManagerFolder), @"OrbManager.exe");
+            string orbManagerToolPath = Path.Combine(context.GetValue(this.BuildOrbManagerFolder), ExeName);
 
             foreach (var serverIp in serverIps)
             {
@@ -77,7 +78,7 @@ namespace BuildOrbManagerTask.Activities
                 var orbClientProcess = new InteractiveProcess(orbManagerToolPath, args);
                 orbClientProcess.Start();
                 orbClientProcess.WaitForExit();
-                LogMessage(context, "Orb client process output: {0}",  orbClientProcess.Output);
+                LogMessage(context, "Orb client({1}) output: {0}",  orbClientProcess.Output, ExeName);
             }
         }
 
