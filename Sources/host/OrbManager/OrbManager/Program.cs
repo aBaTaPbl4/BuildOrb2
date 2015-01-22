@@ -27,7 +27,7 @@ namespace OrbManager
 
                 if (argValues.IsRemoteClientMode)
                 {
-                    using (var serverClient = new TcpClientOrb(argValues, new ColorToByteConverter()))
+                    using (var serverClient = new TcpClientOrb(argValues, new ColorByteConverter()))
                     {
                         serverClient.Send(argValues.Color);
                         Console.WriteLine("\r\nDone!\r\n");

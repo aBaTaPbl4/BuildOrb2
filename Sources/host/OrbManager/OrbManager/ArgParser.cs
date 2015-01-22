@@ -44,6 +44,9 @@ namespace OrbManager
             IsLocalMode = true;
             ServerIp = null;
             Color = OrbColor.None;
+            CountProgressColors = false;
+            ProgressColorForServer = OrbColor.Blue;
+            SuccessColorForServer = OrbColor.Green;
             IsClientMode = !args.Any(x => x.StartsWith("/startServer:", true, CultureInfo.CurrentCulture));
             if (IsClientMode)
             {
@@ -76,6 +79,37 @@ namespace OrbManager
                 string serverIpArg = args.FirstOrDefault(x => x.StartsWith("/startServer:", true, CultureInfo.CurrentCulture));
                 ServerIp = GetServerIp(serverIpArg);
                 PortNumber = GetPort(args);
+                if (args.Any(x => x.StartsWith("/countProgessColors", true, CultureInfo.CurrentCulture)))
+                {
+                    CountProgressColors = true;
+                }
+
+                //reading progress color
+                string progressColorArg = args.FirstOrDefault(x => x.StartsWith("/progressColor:", true, CultureInfo.CurrentCulture));
+                if (progressColorArg != null)
+                {
+
+                    string progressColorValue = progressColorArg.Split(':')[1];
+                    OrbColor resultColor;
+                    if (OrbColor.TryParse(progressColorValue, true, out resultColor))
+                    {
+                        ProgressColorForServer = resultColor;
+                    }
+                }
+
+                //reading success color
+                string successColorArg = args.FirstOrDefault(x => x.StartsWith("/successColor:", true, CultureInfo.CurrentCulture));
+                if (successColorArg != null)
+                {
+
+                    string successColorValue = successColorArg.Split(':')[1];
+                    OrbColor resultColor;
+                    if (OrbColor.TryParse(successColorValue, true, out resultColor))
+                    {
+                        SuccessColorForServer = resultColor;
+                    }
+                }
+
             }            
         }
 
@@ -124,10 +158,14 @@ Parameters:
 /port:xxxx - set port to listen
 /startServer:ServerIpAddress - Start server and listen port 8888 for passed ip
 /startClient:ServerIpAddress - Start Client and connect to server and set color on server side
+/countProgessColors - Key is required if you have several build servers (in tfs words - build agents), which sends commands to orb
+/progressColor - default value is blue. Use with countProgessColors key, to determine 'build is processing' color for orb server, is used by your company
+/successColor  - default value is green. Use with countProgessColors key, to determine 'build is succeeded' color for orb server, is used by your company
 
 Examples:
 'OrbManager /color:red'
 'OrbManager /startServer:192.168.0.1'
+'OrbManager /startServer:192.168.0.1' /countProgressColors /progressColor:white /successColor:red
 'OrbManager.exe /startClient:192.168.0.1 /color:white'
 ";
 
@@ -140,6 +178,11 @@ Examples:
         {
             get { return IsClientMode && !IsLocalMode; }
         }
+
+        public bool CountProgressColors { get; private set; }
+
+        public OrbColor ProgressColorForServer { get; private set; }
+        public OrbColor SuccessColorForServer { get; private set; }
 
         public OrbColor Color { get; private set; }
     }

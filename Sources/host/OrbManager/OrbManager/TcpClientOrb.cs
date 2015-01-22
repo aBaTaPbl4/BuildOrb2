@@ -5,11 +5,11 @@ namespace OrbManager
 {
     public class TcpClientOrb : IDisposable
     {
-        private readonly ColorToByteConverter _converter;
+        private readonly ColorByteConverter _converter;
         private TcpClient _client;
         private NetworkStream _stream;
 
-        public TcpClientOrb(ArgParser args, ColorToByteConverter converter)
+        public TcpClientOrb(ArgParser args, ColorByteConverter converter)
         {
             _converter = converter;
             _client = new TcpClient();
@@ -26,7 +26,7 @@ namespace OrbManager
 
         public void Send(OrbColor color)
         {
-            var colorByte = _converter.Convert(color);
+            var colorByte = _converter.Color2Byte(color);
             var stream = _client.GetStream();
             stream.WriteByte(colorByte);
             stream.Close();

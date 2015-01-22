@@ -15,8 +15,8 @@ namespace OrbManager
         public void TurnLightningOn(OrbColor color)
         {
             //Зажигаем
-            var converner = new ColorToByteConverter();
-            byte colorByte = converner.Convert(color);
+            var converner = new ColorByteConverter();
+            byte colorByte = converner.Color2Byte(color);
             TurnLightningOn(colorByte);            
         }
 
