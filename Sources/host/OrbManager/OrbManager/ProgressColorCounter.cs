@@ -36,7 +36,8 @@ namespace OrbManager
                     DateTime buidStarted = _receivedProgressColorDates.Dequeue();
                     if (color == _successColor)
                     {
-                        _avgBuildDuration = DateTime.Now - buidStarted;    
+                        _avgBuildDuration = DateTime.Now - buidStarted;
+                        _avgBuildDuration += TimeSpan.FromMinutes(5);
                     }                    
                     DequeExpiredProgressColors();
                 }
