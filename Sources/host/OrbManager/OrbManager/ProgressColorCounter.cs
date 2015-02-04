@@ -6,20 +6,24 @@ using System.Threading.Tasks;
 
 namespace OrbManager
 {
-    class ProgressColorCounter : IProgressColorCounter
+    public class ProgressColorCounter : IProgressColorCounter
     {
         private readonly OrbColor _progressColor;
         private readonly OrbColor _successColor;
         private Queue<DateTime> _receivedProgressColorDates;
         private OrbColor _curColor;
         private TimeSpan _avgBuildDuration;
-        public ProgressColorCounter(OrbColor progressColor, OrbColor successColor)
+        public ProgressColorCounter(OrbColor progressColor, OrbColor successColor, TimeSpan avgBuildDuration)
         {
             _progressColor = progressColor;
             _successColor = successColor;
             _curColor = progressColor;
             _receivedProgressColorDates = new Queue<DateTime>();
-            _avgBuildDuration = TimeSpan.FromHours(1);
+            _avgBuildDuration = avgBuildDuration;
+        }
+
+        public ProgressColorCounter(OrbColor progressColor, OrbColor successColor) : this(progressColor, successColor, TimeSpan.FromHours(1))
+        {            
         }
 
         public void ProcessColor(OrbColor color)
@@ -51,9 +55,13 @@ namespace OrbManager
 
         private void DequeExpiredProgressColors()
         {
-            while (DateTime.Now - _receivedProgressColorDates.Peek() > _avgBuildDuration)
+            if (_receivedProgressColorDates.Count == 0)
             {
-                _receivedProgressColorDates.Dequeue();
+                return;
+            }
+            while (_receivedProgressColorDates.Count > 0 && (DateTime.Now - _receivedProgressColorDates.Peek() > _avgBuildDuration))
+            {
+                _receivedProgressColorDates.Dequeue();                
             }
         }
 
