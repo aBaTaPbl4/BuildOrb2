@@ -12,6 +12,7 @@ namespace OrbManager
         private readonly OrbColor _successColor;
         private Queue<DateTime> _receivedProgressColorDates;
         private OrbColor _curColor;
+        private OrbColor _lastNotProgressColor;
         private TimeSpan _avgBuildDuration;
         public ProgressColorCounter(OrbColor progressColor, OrbColor successColor, TimeSpan avgBuildDuration)
         {
@@ -35,6 +36,7 @@ namespace OrbManager
             }
             else
             {
+                _lastNotProgressColor = color;
                 if (_receivedProgressColorDates.Count > 0)
                 {
                     DateTime buidStarted = _receivedProgressColorDates.Dequeue();
@@ -67,6 +69,11 @@ namespace OrbManager
 
         public OrbColor GetCurrentColor()
         {
+            DequeExpiredProgressColors();
+            if (_receivedProgressColorDates.Count == 0 && _curColor == _progressColor)
+            {
+                _curColor = _lastNotProgressColor;
+            }
             return _curColor;
         }
     }
