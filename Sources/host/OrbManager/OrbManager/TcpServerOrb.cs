@@ -64,6 +64,7 @@ namespace OrbManager
         {
             if (_listener != null)
             {
+                _orb.TurnLightningOff();
                 _listener.Stop();
             }
         }
