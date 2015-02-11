@@ -16,6 +16,7 @@ namespace OrbManager
         private TimeSpan _avgBuildDuration;
         public ProgressColorCounter(OrbColor progressColor, OrbColor successColor, TimeSpan avgBuildDuration)
         {
+            _lastNotProgressColor = OrbColor.Red;
             _progressColor = progressColor;
             _successColor = successColor;
             _curColor = progressColor;

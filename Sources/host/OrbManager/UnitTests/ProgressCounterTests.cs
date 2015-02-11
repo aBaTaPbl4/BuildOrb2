@@ -62,6 +62,14 @@ namespace UnitTests
             CurrentColorCheck(OrbColor.Red);
         }
 
+        [Test]
+        public void Test5()
+        {
+            _counter.ProcessColor(OrbColor.Blue);
+            Thread.Sleep(401);
+            CurrentColorCheck(OrbColor.Red);
+        }
+
         private void CurrentColorCheck(OrbColor expectedColor)
         {
             Assert.AreEqual(expectedColor, _counter.GetCurrentColor());
