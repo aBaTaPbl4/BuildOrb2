@@ -160,25 +160,9 @@ uchar   i;
     LED_PORT_DDR |= leds;   /* ноги на которых висит светодиод конфигурируются как выходы(т.е. на них будем подавать напряжение, НО не принимать) */
 	LED_PORT_OUTPUT |= leds;
     sei();
-	int counter = 0;
     for(;;){                /* цикл событий main */
         wdt_reset();
-        usbPoll();	
-		if ((counter % 1501) == 0)
-		{
-			SetColor(RED_BIT_IN_PACKET);
-			counter = 0;
-		}
-		else if ((counter % 1001) == 0)
-		{
-			SetColor(BLUE_BIT_IN_PACKET);
-		}
-		else if ((counter % 501) == 0)
-		{
-			SetColor(GREEN_BIT_IN_PACKET);
-		}
-		counter++;
-		
+        usbPoll();			
     }
     return 0;
 }
