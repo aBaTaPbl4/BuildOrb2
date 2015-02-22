@@ -42,26 +42,10 @@ PROGMEM const char usbHidReportDescriptor[22] = {    /* дескриптор р�
     0xb2, 0x02, 0x01,              //   FEATURE (Data,Var,Abs,Buf)
     0xc0                           // END_COLLECTION
 };
-/* Дескриптор выше - только макет, это заглушает драйверы. Репорт, который его 
- *  описывает, состоит из одного байта неопределенных данных. Мы не передаем
- *  наши данные через HID-репорты, вместо этого мы используем custom-запросы.
- */
 
-/* ------------------------------------------------------------------------- */
-
-usbMsgLen_t usbFunctionSetup(uchar data[8])
+void SetColor(uchar colorByte) 
 {
-	usbRequest_t    *rq = (void *)data;
-	//LED_PORT_OUTPUT |= _BV(BLUE_BIT);
-	//return 1;	
-    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_VENDOR)
-	{
-        //DBG1(0x50, &rq->bRequest, 1);   /* отладочный вывод: печатаем наш запрос */
-        if(rq->bRequest == CUSTOM_RQ_SET_STATUS)
-		{			
-			uchar colorByte = rq->wValue.bytes[0];
-			
-            if((colorByte & RED_BIT_IN_PACKET) == 0) //у нас светодиод с реверсом напряжения (у него все наооборот)
+	        if((colorByte & RED_BIT_IN_PACKET) == 0) //у нас светодиод с реверсом напряжения (у него все наооборот)
 			{/* очистить LED */
                 LED_PORT_OUTPUT |= _BV(RED_BIT);
             }
@@ -84,7 +68,30 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
 			else
 			{
 	            LED_PORT_OUTPUT &= ~_BV(BLUE_BIT);
-            }			
+            }
+}
+
+/* Дескриптор выше - только макет, это заглушает драйверы. Репорт, который его 
+ *  описывает, состоит из одного байта неопределенных данных. Мы не передаем
+ *  наши данные через HID-репорты, вместо этого мы используем custom-запросы.
+ */
+
+/* ------------------------------------------------------------------------- */
+
+usbMsgLen_t usbFunctionSetup(uchar data[8])
+{
+	usbRequest_t    *rq = (void *)data;
+	//LED_PORT_OUTPUT |= _BV(BLUE_BIT);
+	//return 1;	
+    if((rq->bmRequestType & USBRQ_TYPE_MASK) == USBRQ_TYPE_VENDOR)
+	{
+        //DBG1(0x50, &rq->bRequest, 1);   /* отладочный вывод: печатаем наш запрос */
+        if(rq->bRequest == CUSTOM_RQ_SET_STATUS)
+		{			
+			uchar colorByte = rq->wValue.bytes[0];
+			
+            SetColor(colorByte);
+			
         }
 		else if(rq->bRequest == CUSTOM_RQ_GET_STATUS)
 		{
@@ -107,7 +114,9 @@ usbMsgLen_t usbFunctionSetup(uchar data[8])
         }
 		else if(rq->bRequest == CUSTOM_RQ_GET_PORT_STATUS)
 		{
-			usbMsgPtr = 0x00 | LED_PORT_OUTPUT;
+			static uchar dataBuffer[1];
+			dataBuffer[0] = 0x00 | LED_PORT_OUTPUT;
+			usbMsgPtr = dataBuffer;
 			return 1;		
 		}
     }
@@ -151,9 +160,25 @@ uchar   i;
     LED_PORT_DDR |= leds;   /* ноги на которых висит светодиод конфигурируются как выходы(т.е. на них будем подавать напряжение, НО не принимать) */
 	LED_PORT_OUTPUT |= leds;
     sei();
+	int counter = 0;
     for(;;){                /* цикл событий main */
         wdt_reset();
-        usbPoll();		
+        usbPoll();	
+		if ((counter % 1501) == 0)
+		{
+			SetColor(RED_BIT_IN_PACKET);
+			counter = 0;
+		}
+		else if ((counter % 1001) == 0)
+		{
+			SetColor(BLUE_BIT_IN_PACKET);
+		}
+		else if ((counter % 501) == 0)
+		{
+			SetColor(GREEN_BIT_IN_PACKET);
+		}
+		counter++;
+		
     }
     return 0;
 }
