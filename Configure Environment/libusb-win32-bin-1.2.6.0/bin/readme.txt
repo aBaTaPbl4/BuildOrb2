@@ -1,0 +1,1 @@
+см папку с драйверами винды C:\Windows\inf\avrispmkii.inf

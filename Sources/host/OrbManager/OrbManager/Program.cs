@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using LibUsbDotNet;
 using LibUsbDotNet.Main;
 
@@ -8,6 +9,7 @@ namespace OrbManager
     class Program
     {
         public static UsbDevice MyUsbDevice;
+        private static BuildOrbDevice _orb;
 
         #region SET YOUR USB Vendor and Product ID!
 
@@ -39,15 +41,15 @@ namespace OrbManager
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
                 // If the device is open and ready
                 if (MyUsbDevice == null) throw new Exception("Device Not Found.");
-
-                var orb = new BuildOrbDevice(MyUsbDevice);
+                SetConsoleCtrlHandler(new HandlerRoutine(ConsoleCtrlCheck), true);
+                _orb = new BuildOrbDevice(MyUsbDevice);
                 if (argValues.IsClientMode)
                 {
-                    orb.TurnLightningOn(argValues.Color);
+                    _orb.TurnLightningOn(argValues.Color);
                 }
                 else
                 {
-                    var server = new TcpServerOrb(argValues, orb);
+                    var server = new TcpServerOrb(argValues, _orb);
                     Console.WriteLine("Server was started on interface {0}", argValues.ServerIp);
                     server.Start();
                 }
@@ -61,27 +63,56 @@ namespace OrbManager
             }
             finally
             {
-                if (MyUsbDevice != null)
-                {
-                    if (MyUsbDevice.IsOpen)
-                    {
-                        IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
-                        if (!ReferenceEquals(wholeUsbDevice, null))
-                        {
-                            // Release interface
-                            wholeUsbDevice.ReleaseInterface(1);
-                        }
-
-                        MyUsbDevice.Close();
-                    }
-                    MyUsbDevice = null;
-
-                    // Free usb resources
-                    UsbDevice.Exit();
-
-                }
-
+                ReleaseResourcesIfRequired();
             }
         }
+
+        private static void ReleaseResourcesIfRequired()
+        {
+            if (MyUsbDevice != null)
+            {
+                if (MyUsbDevice.IsOpen)
+                {
+                    _orb.TurnLightningOff();
+                    IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
+                    if (!ReferenceEquals(wholeUsbDevice, null))
+                    {
+                        // Release interface
+                        wholeUsbDevice.ReleaseInterface(1);
+                    }
+
+                    MyUsbDevice.Close();
+                }
+                MyUsbDevice = null;
+                // Free usb resources
+                UsbDevice.Exit();
+            }
+        }
+
+        #region OnConsole Closed
+        [DllImport("Kernel32")]
+        public static extern bool SetConsoleCtrlHandler(HandlerRoutine Handler, bool Add);
+
+        // A delegate type to be used as the handler routine 
+        // for SetConsoleCtrlHandler.
+        public delegate bool HandlerRoutine(CtrlTypes CtrlType);
+
+        // An enumerated type for the control messages
+        // sent to the handler routine.
+        public enum CtrlTypes
+        {
+            CTRL_C_EVENT = 0,
+            CTRL_BREAK_EVENT,
+            CTRL_CLOSE_EVENT,
+            CTRL_LOGOFF_EVENT = 5,
+            CTRL_SHUTDOWN_EVENT
+        }
+
+        private static bool ConsoleCtrlCheck(CtrlTypes ctrlType)
+        {
+            ReleaseResourcesIfRequired();
+            return true;
+        }
+        #endregion
     }
 }

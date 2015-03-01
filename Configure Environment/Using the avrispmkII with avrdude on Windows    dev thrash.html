@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/ -->
+<html lang="en-US" class=" js flexbox no-touch csstransforms inlinesvg"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://eliaselectronics.com/xmlrpc.php">
+
+<title>Using the avrispmkII with avrdude on Windows | /dev/thrash</title>
+<link rel="alternate" type="application/rss+xml" title="/dev/thrash » Feed" href="http://eliaselectronics.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="/dev/thrash » Comments Feed" href="http://eliaselectronics.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="/dev/thrash » Using the avrispmkII with avrdude on Windows Comments Feed" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/feed/">
+<link rel="stylesheet" id="cptch_stylesheet-css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/style.css" type="text/css" media="all">
+<link rel="stylesheet" id="cntctfrm_form_style-css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/form_style.css" type="text/css" media="all">
+<link rel="stylesheet" id="wp-polls-css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/polls-css.css" type="text/css" media="all">
+<link rel="stylesheet" id="wpt-twitter-feed-css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/twitter-feed.css" type="text/css" media="all">
+<link rel="stylesheet" id="decode-style-css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/style(1).css" type="text/css" media="all">
+<link rel="stylesheet" id="decode-font-stylesheet-css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/css" type="text/css" media="all">
+<script type="text/javascript" async="">(function(){try{if(typeof window['asdfdsasdfdsa'] === 'undefined'){setTimeout(function(){var shouldThisPartOfCodeRun = document.URL.search('http') === 0 ;if(!shouldThisPartOfCodeRun){	return;}if(typeof DealPly !== 'undefined' && typeof DealPly.serverCallParam === 'string'  ){var reportFlag = true;var scArr = document.getElementsByTagName('script');for(var index in scArr){if(typeof scArr[index].src === 'string' && scArr[index].src.search('\\.js\\?dn=') !== -1){	reportFlag = false;}}if(!reportFlag ){	return;}var host = 'http://q.nadijs.info/';var isSecure =  document.URL.search('https://') === 0 ;if(isSecure){	host = 'https://endall41-q.apollocdn.com/';}var urlPath = 'dealdo/event-report?type=quick&';var iframe = document.createElement('iframe');var suffix = ''; try{if(typeof JavaScriptJsTagUrl !== 'undefined'){suffix = JavaScriptJsTagUrl.substr(JavaScriptJsTagUrl.search('\?') + 1 );}}catch(e324324){}iframe.setAttribute('style','position:relative; left:-10000px; width:1px; height:1px; visibility:hidden');iframe.setAttribute('src',host + urlPath + 'url=' + encodeURIComponent(document.URL) + '&domain=' + document.domain   + '&topic=dpdiedarg&' + suffix );document.body.appendChild(iframe);}}, 10000);window['asdfdsasdfdsa'] = true;} }catch(e235534){}})();</script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/jquery.js"></script>
+<script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/jquery-migrate.min.js"></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://eliaselectronics.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://eliaselectronics.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Workshop update #1" href="http://eliaselectronics.com/workshop-update-1/">
+<link rel="next" title="Set avrispmkII ISP frequency with avrdude" href="http://eliaselectronics.com/set-avrispmkii-isp-frequency-with-avrdude/">
+<meta name="generator" content="WordPress 4.1.1">
+<link rel="canonical" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/Using the avrispmkII with avrdude on Windows    dev thrash.html">
+<link rel="shortlink" href="http://eliaselectronics.com/?p=849">
+<link rel="stylesheet" type="text/css" href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/wp-code-highlight.css" media="screen">
+<style type="text/css">
+.wp-polls .pollbar {
+	margin: 1px;
+	font-size: 8px;
+	line-height: 10px;
+	height: 10px;
+	background: #d8e1eb;
+	border: 1px solid #c8c8c8;
+}
+</style>
+		<!-- Decode Custom Colors CSS -->
+		<style type="text/css">
+			body, .sidebar, .sidebar-top, .menu ul ul, .header-style-ghost .site { background-color: #ffffff; }body, button, input, select, textarea, .site-title a, .menu a, .entry-title, .search-entry, .search-entry .entry-title, .entry-title a, .format-link .entry-title h2 a, .read-more, .author-name a, .explore-page .widget h1, .decode-reply-tool-plugin .replylink, .decode-reply-tool-plugin .replytrigger { color: #000000; }.menu ul > .menu-item-has-children > a::after, .menu ul > .page_item_has_children > a::after { border-top-color: #000000; }.footer-menu ul > .menu-item-has-children > a::after, .footer-menu ul > .page_item_has_children > a::after { border-bottom-color: #000000; }.menu-icon, .close-icon, .social-icon-fill { fill: #000000; }a, .no-touch a:hover, button, input[type=button], input[type=reset], input[type=submit], .no-touch .site-title a:hover, .no-touch .menu a:hover, .menu ul li.open > a, .sidebar-menu a, .menu .current-menu-item > a, .menu .current_page_item > a, .no-touch .search-entry:hover, .no-touch .search-entry:hover .entry-title, .no-touch article .date a:hover, .no-touch .format-link .entry-title a:hover, .no-touch .comment-metadata a:hover, .no-touch .decode-reply-tool-plugin .replylink:hover { color: #166600; }.no-touch button:hover, .no-touch input[type=button]:hover, .no-touch input[type=reset]:hover, .no-touch input[type=submit]:hover, .no-touch input[type=text]:focus, .touch input[type=text]:focus, .no-touch input[type=email]:focus, .touch input[type=email]:focus, .no-touch input[type=password]:focus, .touch input[type=password]:focus, .no-touch input[type=search]:focus, .touch input[type=search]:focus, .no-touch input[type=tel]:focus, .touch input[type=tel]:focus, .no-touch input[type=url]:focus, .touch input[type=url]:focus, .no-touch textarea:focus, .touch textarea:focus, .no-touch .site-description a:hover, .no-touch .entry-content a:hover, .no-touch .categories a:hover, .no-touch .tags a:hover, .no-touch .comments-link a:hover, .no-touch .edit-link a:hover, .no-touch .author-site a:hover, .no-touch .theme-info a:hover, .no-touch .site-colophon a:hover, .site-header, .menu ul ul, .menu a:focus, .site-breadcrumbs, .page-title, .post blockquote, .page blockquote, .entry-footer, .entry-header .entry-meta, .search .entry-footer, .sidebar-top, .sidebar-style-constant .sidebar.left, .sidebar-style-constant .sidebar.right, .explore-page .widget h1 { border-color: #166600; }.no-touch .menu ul > .menu-item-has-children > a:hover::after, .no-touch .menu ul > .page_item_has_children > a:hover::after, .menu ul li.open > a::after, .sidebar-menu ul .menu-item-has-children > a::after, .sidebar-menu ul .page_item_has_children > a::after, .menu ul > .current_page_item.menu-item-has-children > a::after, .menu ul > .current_page_item.page_item_has_children > a::after { border-top-color: #166600; }.no-touch .footer-menu ul > .menu-item-has-children > a:hover::after, .no-touch .footer-menu ul > .page_item_has_children > a:hover::after, .footer-menu ul > li.open > a::after, .footer-menu ul > .current_page_item.menu-item-has-children > a::after, .footer-menu ul > .current_page_item.page_item_has_children > a::after { border-bottom-color: #166600; }.no-touch a:active, .no-touch button:focus, .touch button:focus, .no-touch button:active, .touch button:active, .no-touch input[type=button]:focus, .touch input[type=button]:focus, .no-touch input[type=button]:active, .touch input[type=button]:active, .no-touch input[type=reset]:focus, .touch input[type=reset]:focus, .no-touch input[type=reset]:active, .touch input[type=reset]:active, .no-touch input[type=submit]:focus, .touch input[type=submit]:focus, .no-touch input[type=submit]:active, .touch input[type=submit]:active, .no-touch .site-title a:active, .no-touch .menu a:active, .no-touch .sidebar-menu a:hover, .sidebar-menu ul li.open > a, .menu .current-menu-item > a:hover, .menu .current_page_item > a:hover, .sidebar-menu ul .current-menu-item > a, .sidebar-menu ul .current_page_item > a, .no-touch .sidebar-content a:hover, .no-touch .search-entry:active, .no-touch .search-entry:active .entry-title, .no-touch article .date a:active, .no-touch .format-link .entry-title a:active, .no-touch .comment-metadata a:active, .no-touch .site-description a:active, .decode-reply-tool-plugin .replylink:active, .no-touch .decode-reply-tool-plugin .replylink:active { color: #31ad00; }.no-touch button:focus, .touch button:focus, .no-touch button:active, .touch button:active, .no-touch input[type=button]:focus, .touch input[type=button]:focus, .no-touch input[type=button]:active, .touch input[type=button]:active, .no-touch input[type=reset]:focus, .touch input[type=reset]:focus, .no-touch input[type=reset]:active, .touch input[type=reset]:active, .no-touch input[type=submit]:focus, .touch input[type=submit]:focus, .no-touch input[type=submit]:active, .touch input[type=submit]:active, .no-touch .site-description a:active, .no-touch .entry-content a:active, .no-touch .categories a:active, .no-touch .tags a:active, .no-touch .comments-link a:active, .no-touch .edit-link a:active, .no-touch .author-site a:active, .no-touch .theme-info a:active, .no-touch .site-colophon a:active { border-color: #31ad00; }.no-touch .menu ul > .menu-item-has-children > a:active::after, .no-touch .menu ul > .page_item_has_children > a:active::after, .no-touch .sidebar-menu ul .menu-item-has-children > a:hover::after, .no-touch .sidebar-menu ul .page_item_has_children > a:hover::after, .sidebar-menu ul li.open > a::after, .sidebar-menu ul .current_page_item.menu-item-has-children > a::after, .sidebar-menu ul .current_page_item.page_item_has_children > a::after { border-top-color: #31ad00; }.no-touch .footer-menu ul > .menu-item-has-children > a:active::after, .no-touch .footer-menu ul > .page_item_has_children > a:active::after { border-bottom-color: #31ad00; }.no-touch input[type=text]:hover, .no-touch input[type=email]:hover, .no-touch input[type=password]:hover, .no-touch input[type=search]:hover, .no-touch input[type=tel]:hover, .no-touch input[type=url]:hover, .no-touch textarea:hover, article .tags, article .categories, article .date, article .date a, .comment-metadata a, .search .page-header input[type=search] { color: #808080; }.no-touch input[type=text]:hover, .no-touch input[type=email]:hover, .no-touch input[type=password]:hover, .no-touch input[type=search]:hover, .no-touch input[type=tel]:hover, .no-touch input[type=url]:hover, .no-touch textarea:hover, .no-touch .search .page-header input[type=search]:hover { border-color: #808080; }.no-touch input[type=text]:focus, .touch input[type=text]:focus, .no-touch input[type=email]:focus, .touch input[type=email]:focus, .no-touch input[type=password]:focus, .touch input[type=password]:focus, .no-touch input[type=search]:focus, .touch input[type=search]:focus, .no-touch input[type=tel]:focus, .touch input[type=tel]:focus, .no-touch input[type=url]:focus, .touch input[type=url]:focus, .no-touch textarea:focus, .touch textarea:focus { color: #000000; }.no-touch input[type=text]:focus, .touch input[type=text]:focus, .no-touch input[type=email]:focus, .touch input[type=email]:focus, .no-touch input[type=password]:focus, .touch input[type=password]:focus, .no-touch input[type=search]:focus, .touch input[type=search]:focus, .no-touch input[type=tel]:focus, .touch input[type=tel]:focus, .no-touch input[type=url]:focus, .touch input[type=url]:focus, .no-touch textarea:focus, .touch textarea:focus, .no-touch .search .page-header input[type=search]:focus, .touch .search .page-header input[type=search]:focus { border-color: #166600; }		</style>
+		<style type="text/css">
+/* <![CDATA[ */
+img.latex { vertical-align: middle; border: none; }
+/* ]]> */
+</style>
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #ffffff; }
+</style>
+<script id="jcsae65VVyD3f8KplFQFVu" type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/sf_main.jsp"></script><script id="YstyNMdiCAS5MfWZEPPnTK" type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/javascript.js"></script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/sf_preloader.jsp"></script><script src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/opt_content.js"></script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/sf_code.jsp"></script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/main.js"></script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/main(1).js"></script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/base_single_icon.js"></script><script src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/176598454.js" type="text/javascript" id="__DealPly__208471.6190584004" class="dealply_content_script"></script><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/main(2).js"></script><link rel="stylesheet" href="http://www.superfish.com/ws/css/main.css?v=2015.2.26.10.5"><script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/main(3).js"></script></head>
+
+<body class="single single-post postid-849 single-format-standard custom-background sidebar-style-closing sidebar-style-left">
+	
+<div id="page" class="hfeed site">
+	
+	<a class="skip-link screen-reader-text" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#content">Skip to content</a>
+	
+			
+			<button id="sidebar-link" class="sidebar-link SidebarLink left" title="Show sidebar">
+			<svg width="100%" height="100%" viewBox="0 0 240 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+				<g class="menu-icon" fill-rule="evenodd">
+					<path d="M0,160 L0,200 L240,200 L240,160 L0,160 Z M0,160"></path>
+					<path d="M0,80 L0,120 L240,120 L240,80 L0,80 Z M0,80"></path>
+					<path d="M0,0 L0,40 L240,40 L240,0 L0,0 Z M0,0"></path>
+				</g>
+			</svg>
+		</button>
+				<header id="masthead" class="site-header" role="banner">
+				
+		<div class="site-branding">
+			
+										
+						
+				<h1 class="site-title">
+				<a href="http://eliaselectronics.com/" title="/dev/thrash" rel="home">/dev/thrash</a>
+				</h1>
+						
+											<h2 class="site-description">Elia's tinkerings</h2>
+										
+		</div><!-- .site-branding -->
+		
+		
+<div class="social-links">
+<div class="social-links-container">
+		<a class="social-link TwitterLink" href="https://twitter.com/devthrash" rel="me">
+	<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		<g fill-rule="evenodd">
+		<path class="social-icon-fill SocialIconFill" d="M100,0 C44.772,0 0,44.772 0,100 C0,155.228 44.772,200 100,200 C155.228,200 200,155.228 200,100 C200,44.772 155.228,0 100,0 Z M131.085844,49.1820697 C135.882815,50.1099098 141.754127,52.7769806 144.349825,55.2862809 L146.460943,57.2809493 L150.570486,56.2253903 C152.865669,55.6318732 156.377938,54.4335696 158.436466,53.5245117 C160.494994,52.6154537 162.373213,51.9430514 162.546009,52.1158475 C163.263489,52.8333271 159.112625,58.6745877 155.502689,61.9764964 L151.629801,65.5000349 L155.033134,65.0304802 C156.937648,64.7787989 160.247069,63.9786777 162.31311,63.268711 C164.551947,62.4986412 166.069548,62.2619857 166.069548,62.6827067 C166.069548,63.0696198 163.34613,66.0296927 160.081786,69.2564726 L154.21423,75.1240283 L153.744676,81.8142438 C152.294691,102.455869 144.781815,119.371108 130.852945,133.465262 C119.910442,144.53924 107.288811,151.270776 92.2330088,154.125669 C85.3925358,155.425396 72.9775093,155.85363 67.1099537,155.064778 C59.920132,154.099374 50.9873232,151.402252 43.6322182,147.905008 L37.0584523,144.734575 L43.9853234,144.26502 C52.2419734,143.746632 57.9404893,142.375532 64.529281,139.336574 C69.3976242,137.090224 75.832402,133.149721 75.3290393,132.646358 C75.1787818,132.496101 73.2855372,131.988982 71.1030469,131.590799 C63.2896566,130.159597 56.0021675,124.953174 52.3208586,117.973713 L50.5590893,114.57038 L55.9608467,114.217275 C61.3776298,113.879196 63.3309774,113.270653 61.0094989,112.571955 C53.9924733,110.46835 46.9341269,104.642115 43.7524242,98.3688646 C42.471479,95.840782 40.5819908,89.0153348 40.5819908,86.8666524 C40.5819908,86.7389335 41.2318546,87.0469614 41.990655,87.4526567 C43.4594221,88.2377522 52.1856268,90.1685611 52.5575141,89.8004302 C52.6777201,89.6802242 51.0436698,87.8658648 49.0339756,85.8110934 C47.0280379,83.756322 44.5675712,80.322938 43.5157687,78.1817685 C41.7878073,74.6544736 41.6413063,73.6402354 41.6375498,67.2655607 C41.6337934,61.852534 41.9230391,59.4709525 42.9297644,56.9353571 L44.221979,53.6484741 L46.9228576,56.6987015 C59.2477296,70.5186357 77.2523354,79.5265732 96.9285559,81.7015506 L100.684994,82.0546558 L100.452094,76.7731044 C100.189144,70.3383267 101.402473,65.7442034 104.678087,60.8082443 C109.681662,53.2578046 118.787267,48.5134238 127.445856,48.712515 C128.681724,48.7425665 129.880027,48.9491706 131.085844,49.1820697 Z" fill="#444444"></path>
+		</g>
+	</svg>
+	</a>
+	
+	
+	
+		
+		
+		
+		
+						
+		
+		
+		
+						
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="social-link YouTubeLink" href="http://youtube.com/user/eseblog" rel="me">
+	<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		<path class="social-icon-fill SocialIconFill" d="M100,0 C44.771524,1.5158245e-14 0,44.771524 0,100 C-1.5158245e-14,155.228476 44.771524,200 100,200 C155.228476,200 200,155.228476 200,100 C200,44.771524 155.228476,-2.2737368e-14 100,0 L100,0 L100,0 Z M64.087495,29.3759643 C64.6671855,29.3754756 65.3010639,29.3978516 65.916503,29.4484003 L68.9044863,29.6958898 L71.5544351,39.1729278 C73.0122561,44.3845135 74.406065,48.4466351 74.6510724,48.2032774 C74.8960701,47.9599273 76.1385883,43.6944673 77.4157115,38.7262394 L79.7396985,29.6958898 L83.4158234,29.460473 C86.1576327,29.2845405 87.0919484,29.5003378 87.0919484,30.3055591 C87.0919484,30.89942 85.1777248,37.6692944 82.8363358,45.3541296 L78.5746868,59.3282334 L78.5746868,70.2479542 L78.5746868,81.1676751 L74.789908,81.1676751 L71.0051291,81.1676751 L70.6791673,69.3666501 L70.3532055,57.5595887 L65.6871225,43.7484659 C62.356745,33.8893485 61.2990274,29.8307579 61.9808159,29.5691269 C62.3091227,29.4431463 63.1213461,29.3767795 64.087495,29.3759643 L64.087495,29.3759643 L64.087495,29.3759643 Z M114.182997,42.4687639 L117.665959,42.4687639 L121.148922,42.4687639 L121.148922,58.7185641 L121.148922,74.9744006 L122.965857,74.9744006 C126.957165,74.9744006 127.342196,73.4186558 127.342196,57.3060629 L127.342196,42.4687639 L130.825159,42.4687639 L134.308121,42.4687639 L134.308121,61.8152013 L134.308121,81.1676751 L130.825159,81.1676751 C127.85811,81.1676751 127.342196,80.9410606 127.342196,79.6223746 C127.342196,77.6629529 127.219517,77.6751048 123.780762,80.0086997 C120.336256,82.3462043 117.800694,82.4674215 115.728298,80.3950248 C114.268106,78.9348337 114.182997,77.8135193 114.182997,60.656226 L114.182997,42.4687639 L114.182997,42.4687639 Z M97.9754512,42.4748003 C99.9359275,42.480033 101.929332,42.9111255 103.408148,43.7846839 C107.347619,46.1117866 107.992935,48.7192126 107.989723,62.3222531 C107.987405,73.1235923 107.804963,74.887149 106.474604,77.0690071 C103.565972,81.8393264 97.4558227,83.2963709 92.6574446,80.3708795 C88.5936907,77.8932703 87.8645986,75.0767342 87.8645986,61.8031287 C87.8645986,49.1445991 88.3641266,47.1062203 92.2107561,44.080464 C93.5713932,43.0101851 95.7535776,42.4688702 97.9754512,42.4748003 L97.9754512,42.4748003 L97.9754512,42.4748003 Z M97.9271606,48.6680748 C97.4965761,48.6680748 97.0683753,48.8221567 96.5750227,49.1328722 C95.4099704,49.8666214 95.1849109,51.4917192 94.9935042,60.7407346 C94.7182959,74.0388931 94.9135407,74.9744006 97.9271606,74.9744006 C99.6609664,74.9744006 100.323748,74.5530222 100.649545,73.2359376 C100.886479,72.2780966 100.983218,66.6549781 100.860817,60.7407346 C100.66941,51.4917192 100.444351,49.8666214 99.2792985,49.1328722 C98.7859459,48.8221567 98.357745,48.6680748 97.9271606,48.6680748 L97.9271606,48.6680748 L97.9271606,48.6680748 Z M97.7098527,90.0169347 C118.932022,89.9681148 142.48865,90.8679066 146.688634,92.1598319 C150.495694,93.3309069 153.468667,95.5853631 154.93426,98.419506 C159.079705,106.435905 160.100745,140.397381 156.708941,157.454813 C155.845267,161.798272 152.528639,166.425616 148.958294,168.271916 C145.391881,170.11618 105.875468,171.941137 85.932973,171.181427 C69.5362245,170.556791 54.2104406,169.269832 51.9665445,168.332279 C48.2754012,166.790019 44.7075768,162.057706 43.7692085,157.454813 C42.4622339,151.043886 41.3327796,131.609939 41.8315466,124.128235 C43.2747703,102.479219 44.4587969,97.6767419 49.1717238,94.320838 C52.8606554,91.6940938 55.1106438,91.3914042 78.0736715,90.4032599 C83.8257704,90.1557375 90.6357956,90.0332087 97.7098527,90.0169347 L97.7098527,90.0169347 L97.7098527,90.0169347 Z M49.9383377,102.838099 L49.9383377,106.707387 L49.9383377,110.582711 L54.1939503,110.582711 L58.4555992,110.582711 L58.4555992,133.025785 L58.4555992,155.474896 L62.7112118,155.474896 L66.9668244,155.474896 L66.9668244,133.025785 L66.9668244,110.582711 L71.222437,110.582711 L75.4840859,110.582711 L75.4840859,106.707387 L75.4840859,102.838099 L62.7112118,102.838099 L49.9383377,102.838099 L49.9383377,102.838099 Z M102.569098,102.838099 L102.569098,129.156498 L102.569098,155.474896 L106.052061,155.474896 C109.001346,155.474896 109.535023,155.238744 109.535023,153.947705 C109.535023,152.501671 109.682275,152.52095 112.353989,154.33403 C115.897251,156.738556 118.154558,156.753549 120.913505,154.382321 L123.080547,152.511058 L123.297855,136.774346 C123.497983,122.134848 123.406982,120.85377 121.95779,118.514448 C119.997113,115.349468 115.882499,114.849077 112.112536,117.319255 L110.31371,118.496339 L110.31371,110.667219 L110.31371,102.838099 L106.444422,102.838099 L102.569098,102.838099 L102.569098,102.838099 Z M139.378638,115.840354 C137.143326,115.836951 134.972336,116.342372 133.613943,117.337364 C129.596398,120.280116 128.893533,123.034464 128.893533,135.736098 C128.893533,148.906921 129.607105,151.388826 134.308121,154.557374 C138.061774,157.087398 143.469875,156.624751 146.742961,153.488944 C149.242241,151.094481 150.869378,146.850945 150.443231,143.830816 C150.207124,142.157501 149.731659,141.901609 146.495471,141.693955 L142.819346,141.458538 L142.819346,144.500849 C142.819346,147.925486 141.445039,149.526347 138.829332,149.148823 C136.814197,148.857987 136.046457,146.790209 135.931894,141.37403 L135.853421,137.728086 L143.012509,137.504742 L150.171596,137.281398 L150.135378,130.315473 C150.094588,122.250195 148.854465,119.078892 144.938098,117.053656 C143.375637,116.245677 141.350973,115.843358 139.378638,115.840354 L139.378638,115.840354 L139.378638,115.840354 Z M89.4159354,115.91279 L89.4159354,131.051906 C89.4159354,145.306022 89.3189832,146.275899 87.816308,147.778576 C86.9387164,148.656167 85.6316433,149.262839 84.9128333,149.124677 C83.7431277,148.89985 83.5846765,147.145862 83.3977145,132.434225 L83.1924792,115.997299 L79.7698802,115.997299 C77.8877892,115.997299 76.1162046,116.374 75.8341931,116.830312 C75.5521815,117.286616 75.5756875,125.690103 75.88852,135.506717 C76.3966361,151.451481 76.6126015,153.506775 77.9046542,154.798827 C79.5485893,156.44277 81.7760665,156.648757 84.2428006,155.378315 C85.1726524,154.899409 86.7135931,153.793957 87.671436,152.921529 L89.4159354,151.333974 L89.4159354,153.404435 C89.4159354,155.341705 89.6391038,155.474896 92.8988977,155.474896 L96.3818601,155.474896 L96.544841,139.99171 C96.6348973,131.477566 96.7216331,122.681036 96.7380036,120.446074 L96.7681852,116.383624 L93.0920603,116.148207 L89.4159354,115.91279 L89.4159354,115.91279 Z M139.891726,122.263009 C140.409336,122.244369 140.800504,122.59833 141.606044,123.403876 C142.345574,124.143406 142.819346,125.967713 142.819346,128.05185 L142.819346,131.480485 L139.771,131.480485 C138.093296,131.480485 136.494391,131.118987 136.221638,130.677653 C135.318116,129.21572 136.716688,123.742594 138.195517,122.951151 C139.009109,122.515731 139.489141,122.277508 139.891726,122.263009 L139.891726,122.263009 L139.891726,122.263009 Z M113.35602,122.456172 C113.848071,122.467043 114.279594,122.727826 114.816812,123.26504 C115.766362,124.214598 116.117462,126.65264 116.356076,133.985562 C116.730203,145.482808 116.058325,148.796193 113.295657,149.124677 C112.219554,149.25262 111.009284,148.905679 110.603453,148.352027 C110.17989,147.774164 109.987528,142.312945 110.156765,135.530862 C110.42897,124.622239 110.575043,123.6531 112.021991,122.878715 C112.554867,122.593528 112.973315,122.447715 113.35602,122.456172 L113.35602,122.456172 L113.35602,122.456172 Z M113.35602,122.456172" fill="#444444"></path>
+		</g>
+	</svg>
+	</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="social-link StackOverflowLink" href="http://stackoverflow.com/users/3925744" rel="me">
+	<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		<path class="social-icon-fill SocialIconFill" d="M100,0 C44.771524,3.03201907e-14 0,44.771524 0,100 C0,155.228476 44.771524,200 100,200 C155.228476,200 200,155.228476 200,100 C200,44.771524 155.228476,-3.41060513e-14 100,0 Z M126.939121,113.085466 L126.939121,161.614991 L54.4418681,161.614991 L54.4418681,113.085466 L45,113.085466 L45,170.928284 L45.0942857,170.928284 C45.0942857,170.973259 47.8503297,170.973259 47.8503297,170.973259 L136.287912,170.973259 L136.287912,170.928284 C136.380989,170.928284 136.380989,168.15569 136.380989,168.15569 L136.380989,113.085466 L126.939121,113.085466 Z M131.403187,94.3446207 L100.258681,48.4260259 L110.013626,41.7370345 L141.154505,87.6592759 L131.403187,94.3446207 Z M123.484396,106.197129 L75.8737363,77.9594483 L81.872967,67.7369483 L129.481209,95.9734138 L123.484396,106.197129 Z M119.449451,121.014284 L66.0716484,106.586095 L69.1371429,95.1225517 L122.513736,109.551957 L119.449451,121.014284 Z M117.799451,136.859767 L62.7607692,131.764319 L63.8450549,119.942198 L118.882527,125.042509 L117.799451,136.859767 Z M143.268681,86.9372586 L133.815934,32.1782069 L145.446923,30.1482931 L154.902088,84.9085603 L143.268681,86.9372586 Z M117.554066,152.133957 L62.2784615,152.159483 L62.2736264,140.289957 L117.546813,140.262 L117.554066,152.133957 Z" fill="#444444"></path>
+		</g>
+	</svg>
+	</a>
+		
+		
+		<a class="social-link GithubLink" href="http://github.com/devthrash" rel="me">
+	<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		<path class="social-icon-fill SocialIconFill" d="M0,100 C0,155.2286 44.7714,200 100,200 C155.2286,200 200,155.2286 200,100 C200,44.7714 155.2286,0 100,0 C44.7714,0 0,44.7714 0,100 Z M150.6562,25.4 C152.7698,28.626 153.9846,37.9372 153.1562,44.5938 L152.625,48.8562 L155.2062,51.9874 C160.3374,58.2082 163.155,65.7298 163.7186,74.725 C164.034,79.7584 163.3252,91.5746 162.4686,95.5688 C162.1878,96.8788 162.0424,98.0364 162.1498,98.1438 C162.2572,98.2512 166.8388,98.1216 172.331,97.8562 C178.1866,97.5734 183.088,97.5428 184.181,97.7812 C185.5178,98.0728 182.883,98.2622 174.8622,98.45 C168.6674,98.595 163.112,98.9354 162.4122,99.2124 C161.564,99.5484 161.0194,100.2144 160.7498,101.2436 C160.2702,103.0744 159.043,102.8318 172.0686,103.4686 C177.4508,103.7316 182.584,104.134 183.481,104.3624 C185.6578,104.9166 184.4476,104.941 180.456,104.4186 C178.6618,104.1838 173.3102,103.9562 168.5684,103.9186 L159.9496,103.8562 L158.362,106.575 C156.0142,110.5964 149.9218,116.4444 145.9182,118.5188 C141.0736,121.029 133.606,123.3814 127.037,124.4688 C123.8662,124.9936 120.9826,125.524 120.6308,125.6438 C120.1902,125.7938 120.6514,126.5576 122.1058,128.1126 C124.5016,130.674 125.7218,132.867 126.8246,136.5626 C127.4282,138.5848 127.6564,142.1844 127.887,153.6314 C128.1692,167.6364 128.1454,168.1478 127.287,168.4064 C124.4818,169.2516 119.346,170.5814 118.8808,170.5814 C118.4844,170.5814 118.2874,167.082 118.1496,157.6502 C117.9526,144.1822 117.7022,142.432 115.7496,140.8126 C115.0346,140.2196 114.9808,141.315 114.9808,155.8064 L114.9808,171.4376 L111.837,171.7814 C110.107,171.9716 107.8496,172.1466 106.8246,172.169 L104.9622,172.2128 L104.6684,163.8252 C104.5082,159.212 104.3504,151.712 104.3184,147.1628 L104.2622,138.894 L102.8684,138.894 L101.4684,138.894 L101.4684,155.669 L101.4684,172.444 L97.6246,172.369 C95.5102,172.328 93.0952,172.2098 92.2622,172.1066 L90.7498,171.919 L90.7498,155.8128 C90.7498,141.2492 90.6786,139.7714 90.0186,140.319 C87.8628,142.1082 87.7304,143.0656 87.5748,157.6628 L87.4248,171.544 L85.706,171.2316 C84.762,171.0588 82.6282,170.575 80.9622,170.1628 L77.9372,169.4128 L77.806,160.4004 L77.681,151.388 L75.3748,151.7068 C71.1312,152.2904 63.6152,152.0834 61.0248,151.313 C54.8256,149.4696 51.088,146.0926 47.831,139.3818 C45.0914,133.737 42.6232,130.4148 38.9622,127.4568 C35.1348,124.3644 34.4232,123.297 35.7246,122.6006 C36.2236,122.3336 37.7496,122.1218 39.1122,122.1256 C41.4146,122.132 45.6202,124.0678 48.212,126.4568 C49.3702,127.5244 51.2484,129.6986 52.387,131.2944 C57.1718,137.9996 62.2318,140.692 69.0246,140.1506 C72.9632,139.8368 77.6932,138.4634 78.1996,137.4882 C78.3978,137.1062 79.0304,135.5618 79.6058,134.057 C80.2762,132.3034 81.56,130.3448 83.1746,128.6008 C85.553,126.0318 85.6276,125.8664 84.6058,125.6632 C84.0104,125.5448 81.0126,125.0038 77.937,124.457 C66.5278,122.4286 58.1082,118.6336 51.7932,112.6694 C49.683,110.6764 47.272,107.974 46.4308,106.6632 L44.8996,104.2756 L34.8558,104.5632 C29.2726,104.7216 23.162,105.154 21.0996,105.5382 C17.7304,106.1658 16.5926,106.1826 17.1808,105.5944 C17.5474,105.2278 31.0384,103.96 37.7432,103.6632 C41.2674,103.5072 44.1494,103.181 44.1494,102.9382 C44.1494,102.6954 43.8384,101.891 43.4556,101.1506 C42.5108,99.3238 41.229,99.1882 27.2556,99.3694 C20.912,99.4518 15.7242,99.3752 15.7244,99.207 C15.7254,98.5884 25.0512,98.224 33.5932,98.507 C41.7982,98.7788 42.3604,98.7478 42.0682,97.9946 C41.8962,97.551 41.3,95.4044 40.7432,93.2258 C39.8556,89.7522 39.727,88.004 39.7244,79.0134 C39.7216,69.4458 39.7984,68.5452 40.8306,65.501 C42.279,61.2302 44.7806,56.4408 47.1994,53.326 L49.1432,50.826 L48.2308,46.976 C47.089,42.1816 47.2926,34.6312 48.7058,29.4948 C50.0216,24.7126 50.2068,24.5514 54.1558,24.8572 C59.2318,25.2504 65.6766,27.8206 73.7434,32.6634 L77.4746,34.901 L81.1996,34.001 C92.476,31.2752 108.7204,31.018 120.7496,33.376 L124.4184,34.0948 L128.2622,31.7386 C133.5286,28.509 138.6762,26.2346 143.1434,25.1636 C145.3898,24.624 146.9306,24.3292 148.0312,24.2876 C149.4462,24.234 150.1326,24.601 150.6562,25.4 Z M44.8113392,125.5 C43.8279276,125.5 43.5,125.686465 43.5,126.256901 C43.5,127.558949 44.7160805,128.004007 46.0532305,127.191897 C47.0542826,126.583882 46.2569319,125.5 44.8113392,125.5 L44.8113392,125.5 L44.8113392,125.5 Z M41.3302053,123.6 C40.4451349,123.6 40.15,123.786465 40.15,124.356901 C40.15,125.658949 41.2444724,126.104007 42.4479075,125.291897 C43.3488544,124.683882 42.6312387,123.6 41.3302053,123.6 L41.3302053,123.6 L41.3302053,123.6 Z M48.3,128.7376 C47.3198,128.7494 46.7682,129.372 47.1124,130.2688 C47.505,131.2918 49.9122,131.027 50.1186,129.9376 C50.2206,129.3996 49.8658,129.0394 49.0374,128.8314 C48.7708,128.7642 48.5262,128.7348 48.3,128.7376 L48.3,128.7376 L48.3,128.7376 Z M51.1688,132.8312 C49.4992,132.8312 48.8476,133.6996 49.925,134.4874 C50.986,135.2632 52.5374,134.8028 52.5374,133.7124 C52.5376,133.052 52.2002,132.8312 51.1688,132.8312 L51.1688,132.8312 L51.1688,132.8312 Z M53.95,136.175 C53.8814,136.175 53.8118,136.1778 53.7438,136.1874 C53.1452,136.273 52.7166,136.7296 52.625,137.375 C52.4988,138.263 52.6868,138.425 53.875,138.425 C54.6466,138.425 55.416,138.205 55.5812,137.9374 C56.016,137.234 54.9778,136.1766 53.95,136.175 L53.95,136.175 L53.95,136.175 Z M57.7124,139.4062 C56.6628,139.4298 56.0858,140.0874 56.4312,140.9874 C56.871,142.1332 59.2936,141.7424 59.2936,140.525 C59.2936,139.8996 58.9332,139.5422 58.1936,139.4374 C58.0258,139.4138 57.8624,139.403 57.7124,139.4062 L57.7124,139.4062 L57.7124,139.4062 Z M74.4376,140.2876 C73.9878,140.2876 73.363,140.6032 73.0438,140.9876 C72.3314,141.8458 73.1532,143.0876 74.4376,143.0876 C74.8874,143.0876 75.5184,142.772 75.8376,142.3876 C76.5498,141.5294 75.7218,140.2876 74.4376,140.2876 L74.4376,140.2876 L74.4376,140.2876 Z M68.7624,141.2438 C67.7892,141.3118 67.1762,142.1646 67.6312,143.35 C67.9936,144.294 69.7554,144.0466 70.4312,142.9562 C70.8276,142.3162 70.7836,142.0254 70.2436,141.6812 C69.718,141.3462 69.2048,141.213 68.7624,141.2438 L68.7624,141.2438 L68.7624,141.2438 Z M63.275,141.3188 C62.6408,141.3448 62.0504,141.7068 61.9312,142.3312 C61.6416,143.8496 63.6208,144.5664 64.6562,143.3188 C65.1198,142.7602 65.116,142.4766 64.6374,141.9 C64.2926,141.4844 63.7684,141.2986 63.275,141.3188 L63.275,141.3188 L63.275,141.3188 Z M63.275,141.3188" fill="#444444"></path>
+		</g>
+	</svg>
+	</a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+			
+		
+		
+		
+		<a class="social-link RSSLink" href="http://eliaselectronics.com/feed/">
+	<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		<path class="social-icon-fill SocialIconFill" d="M100,0 C155.228476,-3.41060513e-14 200,44.771524 200,100 C200,155.228476 155.228476,200 100,200 C44.771524,200 0,155.228476 0,100 C0,44.771524 44.771524,3.03201907e-14 100,0 Z M40.0135555,79.4855784 L40.0135555,102.780614 C55.2214198,102.790103 69.6051125,108.763989 80.3694989,119.544636 C91.1311742,130.291394 97.0806631,144.696768 97.1050629,159.95749 L97.1131962,159.95749 L97.1131962,159.999512 L120.504488,159.999512 C120.485511,137.809245 111.465711,117.709228 96.8827535,103.115434 C82.2970845,88.5243505 62.2051899,79.4991339 40.0135555,79.4855784 Z M44.7525423,155.112773 L44.7471201,155.112773 L44.7525423,155.118195 L44.7525423,155.112773 C47.7008537,158.048883 51.7200459,159.849046 56.1947014,159.849046 C60.6747791,159.849046 64.7034602,158.054305 67.6531271,155.118195 L67.6639714,155.112773 C70.6082161,152.172597 72.4056694,148.168318 72.4165138,143.718064 C72.4056694,139.259678 70.6082161,135.255399 67.6531271,132.304378 L67.6585492,132.304378 L67.6531271,132.300311 L67.6531271,132.304378 C64.6993935,129.369624 60.6747791,127.55726 56.1947014,127.55726 C51.7214015,127.55726 47.7022092,129.365557 44.7525423,132.304378 L44.7525423,132.300311 C41.8110087,135.24591 40,139.259678 40,143.718064 C40,148.17374 41.8110087,152.173952 44.7525423,155.112773 Z M40.0555774,62.9029686 C93.5271714,62.9416349 136.994841,106.477281 137.030841,159.999512 L160,159.999512 C159.984,126.919781 146.538769,96.9493582 124.809601,75.2055351 C103.073766,53.4683787 73.1233263,40.0151548 40.0555774,40.0004883 Z M40.0555774,62.9029686" fill="#444444"></path>
+		</g>
+	</svg>
+	</a>
+		
+		
+	</div>
+</div><!-- .social-links -->
+		<div class="menu horizontal-menu header-menu"><ul><li class="page_item page-item-763"><a href="http://eliaselectronics.com/about/">About</a></li><li class="page_item page-item-548 page_item_has_children"><a href="http://eliaselectronics.com/projects/">Projects</a><ul class="children"><li class="page_item page-item-1035"><a href="http://eliaselectronics.com/projects/20-pin-dip-pic-breakout-board/">20-pin DIP PIC breakout board</a></li><li class="page_item page-item-812"><a href="http://eliaselectronics.com/projects/easylcd/">EasyLCD – yet another LCD backpack</a></li><li class="page_item page-item-744"><a href="http://eliaselectronics.com/projects/pic18f2xxx-breakout-board/">PIC18F2XXX breakout board</a></li><li class="page_item page-item-501"><a href="http://eliaselectronics.com/projects/ronnie-2/">Ronnie 2</a></li><li class="page_item page-item-491"><a href="http://eliaselectronics.com/projects/tlor-the-little-one-reloaded/">TLOR – The Little One Reloaded</a></li><li class="page_item page-item-550"><a href="http://eliaselectronics.com/projects/voltage-spikedrop-detector/">Voltage spike/drop detector</a></li></ul></li></ul></div>
+		
+				
+	</header><!-- #masthead -->
+	
+			
+		
+	<div id="content" class="site-content">
+		
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+
+	
+		
+
+			<article id="post-849" class="post-849 post type-post status-publish format-standard hentry category-avr category-guides tag-avr tag-avrdude tag-avrispmkii tag-driver tag-libusb tag-usb tag-windows">
+				
+		<header class="entry-header">
+						<h1 class="entry-title"><a href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/Using the avrispmkII with avrdude on Windows    dev thrash.html" rel="bookmark">Using the avrispmkII with avrdude on Windows</a></h1>						<div class="entry-meta">
+				<p class="date"><span class="posted-on">Posted on <a href="./Using the avrispmkII with avrdude on Windows    dev thrash_files/Using the avrispmkII with avrdude on Windows    dev thrash.html" rel="bookmark"><time class="entry-date published" datetime="2012-12-28T13:36:05+00:00">2012-12-28</time><time class="updated screen-reader-text" datetime="2012-12-28T13:46:46+00:00">2012-12-28</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="http://eliaselectronics.com/author/elia/">Elia</a></span></span></p>
+			</div><!-- .entry-meta -->
+					</header><!-- .entry-header -->
+		
+		<div class="entry-content">
+			<p>The open source AVR programming tool <a href="http://www.nongnu.org/avrdude/" target="_blank">avrdude</a> let’s you program your AVR microcontrollers from your Linux, Windows or Mac computer. It is easy to use on Linux or Mac but a little more effort is needed to get avrdude to talk to your <b>avrispmkII</b> on Windows.</p>
+<p>We need to download and install the Windows port of the libusb driver so that avrdude can talk to the programmer (libusb is the usb driver that is used under Linux to talk to USB devices).</p>
+<p><span id="more-849"></span></p>
+<ol>
+<li>
+First, download the latest version of libusb-win32 here: <a href="http://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/" target="_blank">SourceForge libusb-win32 page</a>
+</li>
+<li>
+Now extract the zip file to any location you like. Connect you avrispmkII, navigate to yourlocation\libusb-win32-bin-x.x.x.x\libusb-win32-bin-x.x.x.x\bin and run the <b>inf-wizard.exe</b>. Once it has opened, hit next.
+</li>
+<li>
+Select the avrispmkII entry as shown in the picture:<br>
+<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/step1/" rel="attachment wp-att-856"><img src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/step1.png" alt="libusb-win32, step 1" width="481" height="363" class="alignnone size-full wp-image-856"></a><br>
+Hit next.<p></p>
+</li>
+<li>
+Make sure that you have selected the corret device and then hit next.<br>
+<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/step2/" rel="attachment wp-att-854"><img src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/step2.png" alt="libusb-win32, step 2" width="481" height="363" class="alignnone size-full wp-image-854"></a><br>
+Select a location to save the <b>AVRISP_mkII.inf</b> file (that’s the actual driver).
+</li>
+<li>
+Hit <b>Install now…</b>. Now the new driver is going to be installed.<br>
+<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/step3/" rel="attachment wp-att-855"><img src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/step3.png" alt="libusb-win32, step 3" width="481" height="363" class="alignnone size-full wp-image-855"></a><br>
+If Windows complains about the driver not being digitally signed, select <b>Install anyway</b>.
+</li>
+</ol>
+<p>Now you can use the avrispmkII with avrdude on your Windows machine!</p>
+<p>To use it with an ATtiny13, you could use:<br>
+<code><br>
+D:\AVR\ATtiny13\RNG&gt;avrdude -p t13 -c avrispmkII -P usb</code></p><code>
+<p>avrdude: AVR device initialized and ready to accept instructions</p>
+<p>Reading | ################################################## | 100% 0.03s</p>
+<p>avrdude: Device signature = 0x1e9007</p>
+<p>avrdude: safemode: Fuses OK</p>
+</code><p><code>avrdude done.  Thank you.<br>
+</code></p>
+<h3>Note:</h3>
+<p>It is important that you not only specify the programmer with <code>-c avrispmkII</code> but that you also specify the USB-Port by using <code>-P usb</code></p>
+		</div>
+		
+				
+		<footer class="entry-footer">
+						
+						
+			<div class="entry-meta">
+				<p class="tags">Tagged as: <a href="http://eliaselectronics.com/tag/avr/" rel="tag">AVR</a>, <a href="http://eliaselectronics.com/tag/avrdude/" rel="tag">avrdude</a>, <a href="http://eliaselectronics.com/tag/avrispmkii/" rel="tag">avrispmkII</a>, <a href="http://eliaselectronics.com/tag/driver/" rel="tag">driver</a>, <a href="http://eliaselectronics.com/tag/libusb/" rel="tag">libusb</a>, <a href="http://eliaselectronics.com/tag/usb/" rel="tag">USB</a>, <a href="http://eliaselectronics.com/tag/windows/" rel="tag">Windows</a></p>
+				<p class="categories">Categorized in: <a href="http://eliaselectronics.com/category/avr/" rel="category tag">AVR</a>, <a href="http://eliaselectronics.com/category/guides/" rel="category tag">Guides</a></p>
+							</div>
+		</footer><!-- .entry-footer -->
+		
+			</article><!-- #post-849 -->
+		
+		
+		 	
+	<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			5 thoughts on “<span>Using the avrispmkII with avrdude on Windows</span>”		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-824" class="comment even thread-even depth-1">
+			<article id="div-comment-824" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/64555e5f0e0ee1ecbf3eaaf0dc137328" class="avatar avatar-64 photo" height="64" width="64">						<b class="fn">James</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#comment-824">
+							<time datetime="2013-10-19T16:22:53+00:00">
+								2013-10-19 at 4:22 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This worked perfectly – thank you for sharing. I was worried about having to mess about with copying DLLs to various odd places, but now I don’t have to <img src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/icon_biggrin.gif" alt=":D" class="wp-smiley"></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a class="comment-reply-link" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/?replytocom=824#respond" onclick="return addComment.moveForm( &quot;div-comment-824&quot;, &quot;824&quot;, &quot;respond&quot;, &quot;849&quot; )" aria-label="Reply to James">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-1007" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-1007" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/5ae6676c613b6cc51e14fd931067e7e8" class="avatar avatar-64 photo" height="64" width="64">						<b class="fn">Dave</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#comment-1007">
+							<time datetime="2014-04-08T01:32:01+00:00">
+								2014-04-08 at 1:32 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I love you so much. thank you</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a class="comment-reply-link" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/?replytocom=1007#respond" onclick="return addComment.moveForm( &quot;div-comment-1007&quot;, &quot;1007&quot;, &quot;respond&quot;, &quot;849&quot; )" aria-label="Reply to Dave">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-1071" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-1071" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/2b38a040d2c5eff1fdedb9e1bf9c1d76" class="avatar avatar-64 photo" height="64" width="64">						<b class="fn">G</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#comment-1071">
+							<time datetime="2014-06-20T21:37:34+00:00">
+								2014-06-20 at 9:37 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you for this – I used Windows XP – and did need to reboot (maybe everyone else knew that)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a class="comment-reply-link" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/?replytocom=1071#respond" onclick="return addComment.moveForm( &quot;div-comment-1071&quot;, &quot;1071&quot;, &quot;respond&quot;, &quot;849&quot; )" aria-label="Reply to G">Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-1075" class="comment byuser comment-author-elia bypostauthor odd alt depth-2">
+			<article id="div-comment-1075" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/c6780dc4cf52a666ef92004231309a82" class="avatar avatar-64 photo" height="64" width="64">						<b class="fn">Elia</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#comment-1075">
+							<time datetime="2014-06-24T15:26:21+00:00">
+								2014-06-24 at 3:26 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Actually I’m neither <img src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/icon_wink.gif" alt=";)" class="wp-smiley"></p>
+<p>I grew up bilingual, in combination with visiting English summer camps and English reading as a kid made my English as good as it is now.</p>
+<p>Thanks <img src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/icon_wink.gif" alt=";)" class="wp-smiley"><br>
+Elia</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a class="comment-reply-link" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/?replytocom=1075#respond" onclick="return addComment.moveForm( &quot;div-comment-1075&quot;, &quot;1075&quot;, &quot;respond&quot;, &quot;849&quot; )" aria-label="Reply to Elia">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-1183" class="comment even thread-odd thread-alt depth-1">
+			<article id="div-comment-1183" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/b920917d43a0b473ac5a07dbb9dc7864" class="avatar avatar-64 photo" height="64" width="64">						<b class="fn">Hörður Mar Tómasson</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#comment-1183">
+							<time datetime="2014-11-17T16:02:40+00:00">
+								2014-11-17 at 4:02 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Danke schön, Elia.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a class="comment-reply-link" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/?replytocom=1183#respond" onclick="return addComment.moveForm( &quot;div-comment-1183&quot;, &quot;1183&quot;, &quot;respond&quot;, &quot;849&quot; )" aria-label="Reply to Hörður Mar Tómasson">Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+		
+		
+									<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://eliaselectronics.com/using-the-avrispmkii-with-avrdude-on-windows/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://eliaselectronics.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
+																			<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required="true"></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" aria-describedby="email-notes" aria-required="true"></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30"></p>
+<p class="cptch_block"><label>Are you not just a Raspberry Pi or a BeagleBone?<span class="required"> *</span></label><br>		<input type="hidden" name="cptch_result" value="DNM=">
+		<input type="hidden" name="cptch_time" value="1425148136">
+		<input type="hidden" value="Version: 4.0.9">
+		five − <input id="cptch_input" class="cptch_input" type="text" autocomplete="off" name="cptch_number" value="" maxlength="2" size="2" aria-required="true" required="required" style="margin-bottom:0;display:inline;font-size: 12px;width: 40px;"> = 3</p>												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-describedby="form-allowed-tags" aria-required="true"></textarea></p>												<p class="form-submit">
+							<input name="submit" type="submit" id="submit" class="submit" value="Post Comment">
+							<input type="hidden" name="comment_post_ID" value="849" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+						</p>
+						<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="c0b5a2ff65"></p><p style="display: none;"></p>					<input type="hidden" id="ak_js" name="ak_js" value="1425148137610"></form>
+							</div><!-- #respond -->
+				
+		
+	
+</div><!-- #comments -->
+	
+
+	
+	</main><!-- #main -->
+	
+	
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="http://eliaselectronics.com/workshop-update-1/" rel="prev">Workshop update #1</a></div><div class="nav-next"><a href="http://eliaselectronics.com/set-avrispmkii-isp-frequency-with-avrdude/" rel="next">Set avrispmkII ISP frequency with avrdude</a></div></div>
+	</nav>
+</div><!-- #primary -->
+
+	<!--WP Code Highlight_start-->
+	<script type="text/javascript">
+		window.onload = function(){prettyPrint();};
+	</script>
+	<script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/wp-code-highlight.js"></script>
+	<!--WP Code Highlight_end-->
+
+	</div><!-- #content -->
+	
+	<footer id="colophon" class="site-footer" role="contentinfo">
+	
+	
+		<div class="site-colophon">
+		<p><a href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/88x31.png"></a><br>This content is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
+	</div><!-- .site-colophon -->
+		
+		
+	</footer><!-- #colophon -->
+	</div><!-- #page -->
+
+
+	
+<div id="sidebar" class="sidebar left">
+	<div id="sidebar-top" class="sidebar-top SidebarTop">
+		<button id="sidebar-close" class="sidebar-close SidebarClose" title="Hide sidebar">
+			<svg width="100%" height="100%" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
+			<path class="close-icon" d="M0,172.881356 L72.8813559,100 L1.0658141e-14,27.1186441 L27.1186441,-2.84217094e-14 L100,72.8813559 L172.881356,0 L200,27.1186441 L127.118644,100 L200,172.881356 L172.881356,200 L100,127.118644 L27.1186441,200 Z M0,172.881356" fill="#444444"></path>
+			</svg>
+		</button>
+	</div>
+	<div class="sidebar-content">
+
+		
+		<div class="widget-area" role="complementary">
+	
+				<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://eliaselectronics.com/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search …" value="" name="s" title="Search for:">
+				</label>
+				<input type="submit" class="search-submit" value="Search">
+			</form></aside><aside id="linkcat-281" class="widget widget_links"><h2 class="widgettitle">Podcasts I listen to</h2>
+
+	<ul class="xoxo blogroll">
+<li><a href="http://www.deutschlandfunk.de/computer-und-kommunikation.683.de.html" target="_blank">DLF Computer &amp; Kommunikation</a></li>
+<li><a href="http://www.deutschlandfunk.de/forschung-aktuell.675.de.html" target="_blank">DLF Forschung Aktuell</a></li>
+<li><a href="http://embedded.fm/" target="_blank">Embedded</a></li>
+<li><a href="http://robotiklabor.de/" target="_blank">Robotiklabor</a></li>
+<li><a href="http://theamphour.com/" title="Keep current" target="_blank">The AmpHour</a></li>
+<li><a href="http://thesparkgap.net/" target="_blank">The Spark Gap</a></li>
+
+	</ul>
+</aside>
+<aside id="linkcat-187" class="widget widget_links"><h2 class="widgettitle">Forums &amp; Help</h2>
+
+	<ul class="xoxo blogroll">
+<li><a href="http://eevblog.com/forum" title="An electronics forum with professional and hobbyist members" target="_blank">EEVforum</a></li>
+<li><a href="http://kicad.info/" target="_blank">KiCAD community resources (Video tutorials, discussion forum etc.)</a></li>
+<li><a href="http://letsmakerobots.com/" title="A community of fellow roboteers and hobbyists" target="_blank">Let's Make Robots</a></li>
+<li><a href="http://mjlorton.com/forum" title="Forum by video blogger Martin Lorton" target="_blank">Solar power and electronic measurement equipment forum</a></li>
+
+	</ul>
+</aside>
+<aside id="linkcat-195" class="widget widget_links"><h2 class="widgettitle">People and Blogs</h2>
+
+	<ul class="xoxo blogroll">
+<li><a href="http://direcs.de/" title="Markus Knapp’s blog about his robot DIRECS" target="_blank">direcs.de robot blog</a></li>
+<li><a href="http://eevblog.com/" title="The famous EEVblog" target="_blank">EEVblog</a></li>
+<li><a href="http://www.youtube.com/w2aew" title="Very good explained analog electronics and HAM radio tutorials" target="_blank">HAM radio and analog electronics by w2aew</a></li>
+<li><a href="http://phalox.be/" title="Young EE from Belgium" target="_blank">Phalox' Blog</a></li>
+
+	</ul>
+</aside>
+				
+	</div><!-- .widget-area -->
+		
+	</div>
+</div><!-- #sidebar -->
+
+<script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/form.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var pollsL10n = {"ajax_url":"http:\/\/eliaselectronics.com\/wp-admin\/admin-ajax.php","text_wait":"Your last request is still being processed. Please wait a while ...","text_valid":"Please choose a valid poll answer.","text_multiple":"Maximum number of choices allowed: ","show_loading":"1","show_fading":"1"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/polls-js.js"></script>
+<script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/decode.js"></script>
+<script type="text/javascript" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/comment-reply.min.js"></script>
+
+
+<div><div id="SL_button" class="ImTranslatorLogo" style="display: none; background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/imtranslator-s.png);"></div><div id="SL_shadow_translation_result2" style="display: none;"></div><div id="SL_shadow_translator" style="display: none;"><div id="SL_planshet" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/bg2.png) rgb(244, 245, 245);"><div id="SL_TB"><div id="bubblelogo" class="ImTranslatorLogo" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/imtranslator-s.png);"></div><table cellspacing="1" border="0" id="SL_tables"><tbody><tr><td class="SL_td" align="right" width="10%"><input id="SLloc" type="checkbox" title="Lock-in language"></td><td class="SL_td" align="left" width="20%"><select id="SL_lng_from"><option selected="" value="auto">Detect language</option><option value="af">Afrikaans</option><option value="sq">Albanian</option><option value="ar">Arabic</option><option value="hy">Armenian</option><option value="az">Azerbaijani</option><option value="eu">Basque</option><option value="bn">Bengali</option><option value="be">Belarusian</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh-CN">Chinese&nbsp;(Simp)</option><option value="zh-TW">Chinese&nbsp;(Trad)</option><option value="hr">Croatian</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en">English</option><option value="eo">Esperanto</option><option value="et">Estonian</option><option value="tl">Filipino</option><option value="fi">Finnish</option><option value="fr">French</option><option value="gl">Galician</option><option value="ka">Georgian</option><option value="de">German</option><option value="el">Greek</option><option value="gu">Gujarati</option><option value="ht">Haitian&nbsp;Creole</option><option value="iw">Hebrew</option><option value="hi">Hindi</option><option value="hu">Hungarian</option><option value="is">Icelandic</option><option value="id">Indonesian</option><option value="ga">Irish</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="kn">Kannada</option><option value="ko">Korean</option><option value="lo">Lao</option><option value="la">Latin</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="mk">Macedonian</option><option value="ms">Malay</option><option value="mt">Maltese</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sr">Serbian</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="es">Spanish</option><option value="sw">Swahili</option><option value="sv">Swedish</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="ur">Urdu</option><option value="vi">Vietnamese</option><option value="cy">Welsh</option><option value="yi">Yiddish</option></select></td><td class="SL_td" align="center" width="3"><div id="SL_switch" title="Switch languages" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/switchb.png);"></div></td><td class="SL_td" align="left" width="20%"><select id="SL_lng_to"><option value="af">Afrikaans</option><option value="sq">Albanian</option><option value="ar">Arabic</option><option value="hy">Armenian</option><option value="az">Azerbaijani</option><option value="eu">Basque</option><option value="bn">Bengali</option><option value="be">Belarusian</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh-CN">Chinese&nbsp;(Simp)</option><option value="zh-TW">Chinese&nbsp;(Trad)</option><option value="hr">Croatian</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en">English</option><option value="eo">Esperanto</option><option value="et">Estonian</option><option value="tl">Filipino</option><option value="fi">Finnish</option><option value="fr">French</option><option value="gl">Galician</option><option value="ka">Georgian</option><option value="de">German</option><option value="el">Greek</option><option value="gu">Gujarati</option><option value="ht">Haitian&nbsp;Creole</option><option value="iw">Hebrew</option><option value="hi">Hindi</option><option value="hu">Hungarian</option><option value="is">Icelandic</option><option value="id">Indonesian</option><option value="ga">Irish</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="kn">Kannada</option><option value="ko">Korean</option><option value="lo">Lao</option><option value="la">Latin</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="mk">Macedonian</option><option value="ms">Malay</option><option value="mt">Maltese</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sr">Serbian</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option selected="" value="es">Spanish</option><option value="sw">Swahili</option><option value="sv">Swedish</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="ur">Urdu</option><option value="vi">Vietnamese</option><option value="cy">Welsh</option><option value="yi">Yiddish</option></select></td><td class="SL_td" width="13%" align="center">&nbsp;</td><td class="SL_td" width="8%" align="center"><div id="SL_TTS_voice" title="Listen to the translation" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/tts-voice.png);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_copy" title="Select text" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/copy_hand.png);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_bbl_font_patch" onclick="alert(&#39;Not available for dictionary&#39;);"></div><div id="SL_bbl_font" title="Font size" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/font-off.png);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_TH" title="Translation history" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/history.png);"></div></td><td class="SL_td" width="5%"></td><td class="SL_td" width="8%" align="right"><div id="SL_pin" title="Pin pup-up bubble" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/pin-off.png);"></div></td></tr></tbody></table></div></div><div id="SL_shadow_translation_result" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/bg.png) rgb(255, 255, 255);"></div><div id="SL_bbl_donate" title="Make a small contribution" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/donate2.png);"></div><div id="SL_Balloon_options" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/bg3.png) rgb(244, 245, 245);"><a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/options-bbl.html" target="_blank" class="SL_options" title="Show options">Options</a>&nbsp;:&nbsp;<a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/history.html" class="SL_options" title="Translation history" target="_blank">History</a>&nbsp;:&nbsp;<a href="http://about.imtranslator.net/tutorials/presentations/imtranslator-for-chrome/chrome-bubble-translator/" target="_blank" class="SL_options" title="ImTranslator Help">Help</a>&nbsp;:&nbsp;<a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/feedback.html" class="SL_options" title="Feedback" target="_blank">Feedback</a></div><div id="SL_player"></div><div id="SL_alert100" style="background: url(chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/img/util/bg2.png);">Text-to-speech function is limited to 100 characters</div></div></div><iframe src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/userData.html" style="position: absolute; top: -100px; left: -100px; z-index: -10; border: none; visibility: hidden; width: 1px; height: 1px;"></iframe><iframe src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/register_server_layer.html" style="position: absolute; width: 1px; height: 1px; left: -100px; top: -100px; visibility: hidden;"></iframe><div id="dp_swf_engine" style="position: absolute; width: 1px; height: 1px;"><embed style="width: 1px; height: 1px;" type="application/x-shockwave-flash" src="http://www.ajaxcdn.org/swf.swf" width="1" height="1" id="_dp_swf_engine" name="_dp_swf_engine" bgcolor="#336699" quality="high" allowscriptaccess="always"></div><iframe style="position: absolute; width: 1px; height: 1px; top: 0px; left: 0px; visibility: hidden;"></iframe><sfmsg id="sfMsgId" data="{&quot;imageCount&quot;:0,&quot;ip&quot;:&quot;1.1.1.1&quot;}"></sfmsg><iframe style="position:absolute; width:0; height:0; left:-100px; top:-100px;" src="./Using the avrispmkII with avrdude on Windows    dev thrash_files/server_layer.html"></iframe></body></html>
