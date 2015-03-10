@@ -18,10 +18,9 @@ namespace OrbManager
         {
             _orb = orb;
             _converter = new ColorByteConverter();
-            IPAddress serverAddress;
             if (args.ServerIpAddressDetected)
             {
-                serverAddress = IPAddress.Parse(args.ServerAddress);
+                ServerIpAddress = IPAddress.Parse(args.ServerAddress);
             }
             else
             {
@@ -30,9 +29,16 @@ namespace OrbManager
                 {
                     args.ThrowIncorrectServerAddress(args.ServerAddress);
                 }
-                serverAddress = ips[0];
+                if (ips.Any(x => x.AddressFamily.ToString() == ProtocolFamily.InterNetwork.ToString()))
+                {
+                    ServerIpAddress = ips.First(x => x.AddressFamily.ToString() == ProtocolFamily.InterNetwork.ToString());
+                }
+                else
+                {
+                    ServerIpAddress = ips.Last();
+                }                
             }
-            _listener = new TcpListener(serverAddress, args.PortNumber);
+            _listener = new TcpListener(ServerIpAddress, args.PortNumber);
             if (args.CountProgressColors)
             {
                 _colorCounter = new ProgressColorCounter(args.ProgressColorForServer, args.SuccessColorForServer);        
@@ -42,6 +48,8 @@ namespace OrbManager
                 _colorCounter = new NullColorCounter();
             }
         }
+
+        public IPAddress ServerIpAddress { get; private set; }
 
         public void Start()
         {
