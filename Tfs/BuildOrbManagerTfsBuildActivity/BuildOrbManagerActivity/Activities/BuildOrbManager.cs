@@ -52,6 +52,13 @@ namespace BuildOrbManagerTask.Activities
                 return;
             }
 
+            string strPort = context.GetValue(this.ServersPort);
+            int port = 0;
+            if (!Int32.TryParse(strPort, out port))
+            {
+                port = 0;
+            }
+
             string orbManagerToolPath = Path.Combine(context.GetValue(this.BuildOrbManagerFolder), ExeName);
 
             foreach (var serverIp in serverIps)
@@ -68,6 +75,10 @@ namespace BuildOrbManagerTask.Activities
                 else
                 {
                     servIp = serverIp;
+                    if (port > 0)
+                    {
+                        servPort = port.ToString();
+                    }
                 }
                 string args = string.Format("/startClient:{0} /color:{1}", servIp, curColor);
                 if (servPort != null)
@@ -167,6 +178,7 @@ namespace BuildOrbManagerTask.Activities
         public InArgument<string> TargetBuildDefinitionName { get; set; }
 
         public InArgument<List<string>> ServerIps { get; set; }
+        public InArgument<string> ServersPort { get; set; }        
         public InArgument<string> CompilationFailedColor{ get; set; }        
         public InArgument<string> TestsFailedColor { get; set; }
         public InArgument<string> SuccessColor { get; set; }

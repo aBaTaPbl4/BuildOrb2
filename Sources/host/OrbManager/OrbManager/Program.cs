@@ -50,7 +50,7 @@ namespace OrbManager
                 else
                 {
                     var server = new TcpServerOrb(argValues, _orb);
-                    Console.WriteLine("Server was started on interface {0}", argValues.ServerIp);
+                    Console.WriteLine("Server was started on interface {0}", argValues.ServerAddress);
                     server.Start();
                 }
 

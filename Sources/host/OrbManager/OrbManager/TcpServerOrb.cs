@@ -18,7 +18,21 @@ namespace OrbManager
         {
             _orb = orb;
             _converter = new ColorByteConverter();
-            _listener = new TcpListener(IPAddress.Parse(args.ServerIp), args.PortNumber);
+            IPAddress serverAddress;
+            if (args.ServerIpAddressDetected)
+            {
+                serverAddress = IPAddress.Parse(args.ServerAddress);
+            }
+            else
+            {
+                var ips = Dns.GetHostAddresses(args.ServerAddress);
+                if (ips == null || ips.Length == 0)
+                {
+                    args.ThrowIncorrectServerAddress(args.ServerAddress);
+                }
+                serverAddress = ips[0];
+            }
+            _listener = new TcpListener(serverAddress, args.PortNumber);
             if (args.CountProgressColors)
             {
                 _colorCounter = new ProgressColorCounter(args.ProgressColorForServer, args.SuccessColorForServer);        

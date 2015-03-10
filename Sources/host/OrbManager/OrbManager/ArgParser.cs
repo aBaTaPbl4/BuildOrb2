@@ -42,7 +42,7 @@ namespace OrbManager
             PortNumber = DefaultPortNumber;
             IsClientMode = false;
             IsLocalMode = true;
-            ServerIp = null;
+            ServerAddress = null;
             Color = OrbColor.None;
             CountProgressColors = false;
             ProgressColorForServer = OrbColor.Blue;
@@ -66,18 +66,18 @@ namespace OrbManager
                 {
                     throw new ArgumentsParseException("You must specify color!");
                 }
-                string serverIpArg = args.FirstOrDefault(x => x.StartsWith("/startClient:", true, CultureInfo.CurrentCulture));
-                if (serverIpArg != null)
+                string ServerAddressArg = args.FirstOrDefault(x => x.StartsWith("/startClient:", true, CultureInfo.CurrentCulture));
+                if (ServerAddressArg != null)
                 {
-                    ServerIp = GetServerIp(serverIpArg);
+                    ServerAddress = GetServerAddress(ServerAddressArg);
                     IsLocalMode = false;
                 }
                 PortNumber = GetPort(args);
             }
             else
             {
-                string serverIpArg = args.FirstOrDefault(x => x.StartsWith("/startServer:", true, CultureInfo.CurrentCulture));
-                ServerIp = GetServerIp(serverIpArg);
+                string serverAddressArg = args.FirstOrDefault(x => x.StartsWith("/startServer:", true, CultureInfo.CurrentCulture));
+                ServerAddress = GetServerAddress(serverAddressArg);
                 PortNumber = GetPort(args);
                 if (args.Any(x => x.StartsWith("/countProgessColors", true, CultureInfo.CurrentCulture)))
                 {
@@ -114,15 +114,20 @@ namespace OrbManager
         }
 
 
-        private string GetServerIp(string serverIpArg)
+        private string GetServerAddress(string serverAddressArg)
         {
-            var serverIpArgParts = serverIpArg.Split(':');
-            var serverIpArgValue = serverIpArgParts[1];
-            if (!Regex.IsMatch(serverIpArgValue, IpAddressRegexMask))
+            var serverAddressArgParts = serverAddressArg.Split(':');
+            var serverAddressArgValue = serverAddressArgParts[1];
+            if (string.IsNullOrEmpty(serverAddressArg))
             {
-                throw new ArgumentsParseException("ServerIp '{0}' does not match to ip address", serverIpArgValue);
+                ThrowIncorrectServerAddress(serverAddressArgValue);
             }
-            return serverIpArgValue;
+            return serverAddressArgValue;
+        }
+
+        public void ThrowIncorrectServerAddress(string serverAddress)
+        {
+            throw new ArgumentsParseException("Server address  '{0}' is not correct", serverAddress);
         }
 
 
@@ -155,9 +160,9 @@ namespace OrbManager
 OrbManager - console tool to set color on build orb device connected via usb
 Parameters:
 /color:col (red | green | yellow | blue | white) - Start locally and set color on device
-/port:xxxx - set port to listen
-/startServer:ServerIpAddress - Start server and listen port 8888 for passed ip
-/startClient:ServerIpAddress - Start Client and connect to server and set color on server side
+/port:xxxx - set port to listen(default 8888)
+/startServer:ServerIpAddress(or host name) - Start server and listen port 8888 for passed ip or host name
+/startClient:ServerIpAddress(or host name) - Start Client and connect to server and set color on server side
 /countProgessColors - Key is required if you have several build servers (in tfs words - build agents), which sends commands to orb
 /progressColor - default value is blue. Use with countProgessColors key, to determine 'build is processing' color for orb server, is used by your company
 /successColor  - default value is green. Use with countProgessColors key, to determine 'build is succeeded' color for orb server, is used by your company
@@ -170,7 +175,20 @@ Examples:
 ";
 
         public int PortNumber { get; private set; }
-        public string ServerIp { get; private set; }
+        public string ServerAddress { get; private set; }
+
+        public bool ServerIpAddressDetected
+        {
+            get
+            {
+                if (String.IsNullOrEmpty(ServerAddress))
+                {
+                    return false;
+                }
+                return Regex.IsMatch(ServerAddress, IpAddressRegexMask);
+            }
+        }
+
         public bool IsClientMode { get; private set; }
         public bool IsLocalMode { get; private set; }
 
