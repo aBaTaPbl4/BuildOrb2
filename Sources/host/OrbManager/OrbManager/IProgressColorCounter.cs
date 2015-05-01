@@ -2,7 +2,8 @@
 {
     interface IProgressColorCounter
     {
-        void ProcessColor(OrbColor color);
+        void ProcessColor(OrbColor color, string sender);
         OrbColor GetCurrentColor();
+
     }
 }

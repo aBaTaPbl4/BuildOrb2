@@ -57,28 +57,43 @@ namespace OrbManager
 
             while (true)
             {
-                var receivedColorByte = WaitForColorByteCommand();
-                var colorByteToSend = CalculateColorByteForOrb(receivedColorByte);
+                var colorPacket = WaitForColorByteCommand();
+                byte colorByteToSend = CalculateColorByteForOrb(colorPacket);
                 _orb.TurnLightningOn(colorByteToSend);
             }
         }
 
-        private byte CalculateColorByteForOrb(byte receivedColorByte)
+        private byte CalculateColorByteForOrb(ColorPacket colorPacket)
         {
-            var receivedColor = _converter.Byte2Color(receivedColorByte);
-            _colorCounter.ProcessColor(receivedColor);
+            OrbColor receivedColor = _converter.Byte2Color(colorPacket.ColorByte);
+            Console.WriteLine("{0} Recieved color {1} from sender {2}", DateTime.Now, receivedColor, colorPacket.SenderName);
+            _colorCounter.ProcessColor(receivedColor, colorPacket.SenderName);
             var colorToSendToOrb = _colorCounter.GetCurrentColor();
             var colorByteToSendToOrb = _converter.Color2Byte(colorToSendToOrb);
             return colorByteToSendToOrb;
         }
 
-        private byte WaitForColorByteCommand()
+        private ColorPacket WaitForColorByteCommand()
         {
-            var client = _listener.AcceptTcpClient();
+            TcpClient client = _listener.AcceptTcpClient();
+            string clientName = GetClientNameSafe(client);
             var cliStream = client.GetStream();
             byte receivedColorByte = (byte) cliStream.ReadByte();
             client.Close();
-            return receivedColorByte;
+            return new ColorPacket() {ColorByte = receivedColorByte, SenderName = clientName};
+        }
+
+        private string GetClientNameSafe(TcpClient client)
+        {
+            try
+            {
+                return ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString();
+            }
+            catch (Exception ex)
+            {
+                return "unknown";
+            }
+            
         }
 
         // Остановка сервера

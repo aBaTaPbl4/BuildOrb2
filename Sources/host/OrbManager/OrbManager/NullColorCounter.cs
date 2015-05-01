@@ -11,7 +11,7 @@ namespace OrbManager
         private OrbColor _currentColor = OrbColor.None;
         
 
-        public void ProcessColor(OrbColor color)
+        public void ProcessColor(OrbColor color, string sender)
         {
             _currentColor = color;
         }

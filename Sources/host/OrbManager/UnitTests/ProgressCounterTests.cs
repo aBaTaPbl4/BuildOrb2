@@ -70,6 +70,20 @@ namespace UnitTests
             CurrentColorCheck(OrbColor.Red);
         }
 
+        [Test]
+        public void Test6()
+        {
+            //	Сначала стартуем успешный билд…пошел билд процесс. Затем стартует еще один билд. Через минуту он падает. Еще через 2 минуты завершается саксесный билд успехом(так как в исходниках, на момент его старта, не было кривого чекина). В итоге статус билда будет светится зеленым, что не есть гуд.
+            _counter.ProcessColor(OrbColor.Blue, "builder1");
+            Thread.Sleep(20);
+            _counter.ProcessColor(OrbColor.Blue, "builder2");
+            Thread.Sleep(20);
+            _counter.ProcessColor(OrbColor.Red, "builder2");
+            Thread.Sleep(20);
+            _counter.ProcessColor(OrbColor.Green, "builder1");
+            CurrentColorCheck(OrbColor.Red);
+        }
+
         private void CurrentColorCheck(OrbColor expectedColor)
         {
             Assert.AreEqual(expectedColor, _counter.GetCurrentColor());
