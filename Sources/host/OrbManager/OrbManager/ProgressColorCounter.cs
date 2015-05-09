@@ -5,20 +5,20 @@ using System.Security;
 namespace OrbManager
 {
 
-    public class SenderInfos : Dictionary<string, SenderInfo>
+    public class BuilderInfos : Dictionary<string, BuilderInfo>
     {
         private readonly ProgressColorCounter _counter;
 
-        public SenderInfos(ProgressColorCounter counter)
+        public BuilderInfos(ProgressColorCounter counter)
         {
             _counter = counter;
         }
 
-        public SenderInfo GetInfo(string sender)
+        public BuilderInfo GetInfo(string sender)
         {
             if (!ContainsKey(sender))
             {
-                Add(sender, new SenderInfo(sender, _counter));
+                Add(sender, new BuilderInfo(sender, _counter));
             }
             return this[sender];
         }
@@ -37,12 +37,12 @@ namespace OrbManager
         }
     }
 
-    public class SenderInfo
+    public class BuilderInfo
     {
         private readonly string _sender;
         private readonly ProgressColorCounter _counter;
 
-        public SenderInfo(string sender, ProgressColorCounter counter)
+        public BuilderInfo(string sender, ProgressColorCounter counter)
         {
             _sender = sender;
             _counter = counter;
@@ -81,7 +81,7 @@ namespace OrbManager
         private readonly OrbColor _progressColor;
         private readonly OrbColor _successColor;
 
-        private SenderInfos _senders;
+        private BuilderInfos _builders;
 
         private ColorInfo _curColor;
         private ColorInfo _lastNotProgressColor;
@@ -93,7 +93,7 @@ namespace OrbManager
             _progressColor = progressColor;
             _successColor = successColor;
             _curColor = new ColorInfo(progressColor, DateTime.Now); 
-            _senders = new SenderInfos(this);
+            _builders = new BuilderInfos(this);
             _buildTimeout = buildTimeout;
         }
 
@@ -112,19 +112,19 @@ namespace OrbManager
 
         public void ProcessColor(OrbColor color, string sender)
         {
-            SenderInfo senderInfo = _senders.GetInfo(sender);
+            BuilderInfo builderInfo = _builders.GetInfo(sender);
             if (color == _progressColor)
             {
                 DateTime buildStartTime = DateTime.Now;
-                senderInfo.ProgressQueue.Enqueue(buildStartTime);
+                builderInfo.ProgressQueue.Enqueue(buildStartTime);
                 _curColor = new ColorInfo(color, buildStartTime);
             }
             else
             {
-                DateTime expectedBuildStartedTime = senderInfo.GetFirstBuildTimeStarted();
-                if (_senders.OrdersCount > 0)
+                DateTime expectedBuildStartedTime = builderInfo.GetFirstBuildTimeStarted();
+                if (_builders.OrdersCount > 0)
                 {
-                    DateTime buidStarted = senderInfo.ProgressQueue.Dequeue();
+                    DateTime buidStarted = builderInfo.ProgressQueue.Dequeue();
                     if (color == _successColor)
                     {
                         _buildTimeout = CalcBuildTimeout(buidStarted);
@@ -132,7 +132,7 @@ namespace OrbManager
                     DequeExpiredProgressColors();
                 }
                 
-                if (_senders.OrdersCount == 0)
+                if (_builders.OrdersCount == 0)
                 {
                     if (expectedBuildStartedTime.Ticks >= _lastNotProgressColor.BuildStartTime.Ticks)
                     {
@@ -157,11 +157,11 @@ namespace OrbManager
 
         private void DequeExpiredProgressColors()
         {
-            if (_senders.OrdersCount == 0)
+            if (_builders.OrdersCount == 0)
             {
                 return;
             }
-            foreach (var sender in _senders.Values)
+            foreach (var sender in _builders.Values)
             {
                 while (sender.ProgressQueue.Count > 0 && (DateTime.Now - sender.ProgressQueue.Peek() > _buildTimeout))
                 {
@@ -174,7 +174,7 @@ namespace OrbManager
         public OrbColor GetCurrentColor()
         {
             DequeExpiredProgressColors();
-            if (_senders.OrdersCount == 0 && _curColor.Color == _progressColor)
+            if (_builders.OrdersCount == 0 && _curColor.Color == _progressColor)
             {
                 _curColor = _lastNotProgressColor;
             }
