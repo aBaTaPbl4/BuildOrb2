@@ -84,6 +84,72 @@ namespace UnitTests
             CurrentColorCheck(OrbColor.Red);
         }
 
+        [Test]
+        public void BBGGFrom_Different_BuildersTest()
+        {
+            //•	Сценарии синий, синии, зеленый, зеленый. Зеленый должен загореться только после второго получения зеленого.
+            _counter.ProcessColor(OrbColor.Blue, "builder1");
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Blue, "builder2");
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Green, "builder1");
+            Thread.Sleep(10);
+
+            CurrentColorCheck(OrbColor.Blue);
+
+            _counter.ProcessColor(OrbColor.Green, "builder2");
+
+            CurrentColorCheck(OrbColor.Green);
+        }
+
+        [Test]
+        public void BGBBGGFrom_Different_BuildersTest()
+        {
+            //•	Сценарии синий, синии, зеленый, зеленый. Зеленый должен загореться только после второго получения зеленого.
+            _counter.ProcessColor(OrbColor.Blue, "builder1");
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Green, "builder1");
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Blue, "builder1");
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Blue, "builder2");
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Green, "builder1");
+
+            CurrentColorCheck(OrbColor.Blue);
+
+            _counter.ProcessColor(OrbColor.Green, "builder2");
+
+            CurrentColorCheck(OrbColor.Green);
+        }
+
+        [Test]
+        public void BBGGFrom_Unknown_BuildersTest()
+        {
+            //•	Сценарии синий, синии, зеленый, зеленый. Зеленый должен загореться только после второго получения зеленого.
+            _counter.ProcessColor(OrbColor.Blue);
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Blue);
+            Thread.Sleep(20);
+
+            _counter.ProcessColor(OrbColor.Green);
+            Thread.Sleep(10);
+
+            CurrentColorCheck(OrbColor.Blue);
+
+            _counter.ProcessColor(OrbColor.Green);
+
+            CurrentColorCheck(OrbColor.Green);
+        }
+
+
         private void CurrentColorCheck(OrbColor expectedColor)
         {
             Assert.AreEqual(expectedColor, _counter.GetCurrentColor());

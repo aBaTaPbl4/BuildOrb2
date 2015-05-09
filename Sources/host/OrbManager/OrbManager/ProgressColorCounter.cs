@@ -61,7 +61,7 @@ namespace OrbManager
             {
                 return ProgressQueue.Peek();
             }
-            return DateTime.Now - _counter.AvgBuildDuration;
+            return DateTime.Now - _counter.BuildTimeout;
         }
     }
 
@@ -85,8 +85,8 @@ namespace OrbManager
 
         private ColorInfo _curColor;
         private ColorInfo _lastNotProgressColor;
-        private TimeSpan _avgBuildDuration;
-        public ProgressColorCounter(OrbColor progressColor, OrbColor successColor, TimeSpan avgBuildDuration)
+        private TimeSpan _buildTimeout;
+        public ProgressColorCounter(OrbColor progressColor, OrbColor successColor, TimeSpan buildTimeout)
         {
             _lastNotProgressColor = new ColorInfo(OrbColor.Red, DateTime.Now.AddSeconds(-5)); 
 
@@ -94,12 +94,12 @@ namespace OrbManager
             _successColor = successColor;
             _curColor = new ColorInfo(progressColor, DateTime.Now); 
             _senders = new SenderInfos(this);
-            _avgBuildDuration = avgBuildDuration;
+            _buildTimeout = buildTimeout;
         }
 
-        public TimeSpan AvgBuildDuration
+        public TimeSpan BuildTimeout
         {
-            get { return _avgBuildDuration; }
+            get { return _buildTimeout; }
         }
         public ProgressColorCounter(OrbColor progressColor, OrbColor successColor) : this(progressColor, successColor, TimeSpan.FromHours(1))
         {            
@@ -127,8 +127,7 @@ namespace OrbManager
                     DateTime buidStarted = senderInfo.ProgressQueue.Dequeue();
                     if (color == _successColor)
                     {
-                        _avgBuildDuration = DateTime.Now - buidStarted;
-                        _avgBuildDuration += TimeSpan.FromMinutes(5);
+                        _buildTimeout = CalcBuildTimeout(buidStarted);
                     }                    
                     DequeExpiredProgressColors();
                 }
@@ -148,6 +147,14 @@ namespace OrbManager
             }
         }
 
+        private TimeSpan CalcBuildTimeout(DateTime buidStarted)
+        {
+            var avgBuildDuration = DateTime.Now - buidStarted;
+            avgBuildDuration = TimeSpan.FromSeconds(_buildTimeout.Seconds*2);
+            avgBuildDuration += TimeSpan.FromMinutes(5);
+            return avgBuildDuration;
+        }
+
         private void DequeExpiredProgressColors()
         {
             if (_senders.OrdersCount == 0)
@@ -156,7 +163,7 @@ namespace OrbManager
             }
             foreach (var sender in _senders.Values)
             {
-                while (sender.ProgressQueue.Count > 0 && (DateTime.Now - sender.ProgressQueue.Peek() > _avgBuildDuration))
+                while (sender.ProgressQueue.Count > 0 && (DateTime.Now - sender.ProgressQueue.Peek() > _buildTimeout))
                 {
                     sender.ProgressQueue.Dequeue();
                 }                
