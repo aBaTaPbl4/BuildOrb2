@@ -150,7 +150,7 @@ namespace OrbManager
         private TimeSpan CalcBuildTimeout(DateTime buidStarted)
         {
             var avgBuildDuration = DateTime.Now - buidStarted;
-            avgBuildDuration = TimeSpan.FromSeconds(_buildTimeout.Seconds*2);
+            avgBuildDuration = TimeSpan.FromSeconds(avgBuildDuration.Seconds*2);
             avgBuildDuration += TimeSpan.FromMinutes(5);
             return avgBuildDuration;
         }

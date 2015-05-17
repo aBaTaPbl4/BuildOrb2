@@ -107,7 +107,6 @@ namespace UnitTests
         [Test]
         public void BGBBGGFrom_Different_BuildersTest()
         {
-            //•	Сценарии синий, синии, зеленый, зеленый. Зеленый должен загореться только после второго получения зеленого.
             _counter.ProcessColor(OrbColor.Blue, "builder1");
             Thread.Sleep(20);
 
@@ -127,6 +126,34 @@ namespace UnitTests
             _counter.ProcessColor(OrbColor.Green, "builder2");
 
             CurrentColorCheck(OrbColor.Green);
+        }
+
+        [Test]
+        public void BGBBGGFrom_Different_BuildersTest2()
+        {
+            _counter.ProcessColor(OrbColor.Blue, "172.16.14.134");
+            CurrentColorCheck(OrbColor.Blue);
+            Thread.Sleep(2000);
+            
+            _counter.ProcessColor(OrbColor.Green, "172.16.14.134");
+            CurrentColorCheck(OrbColor.Green);
+            Thread.Sleep(2000);
+
+            _counter.ProcessColor(OrbColor.Blue, "172.16.14.134");
+            CurrentColorCheck(OrbColor.Blue);
+            Thread.Sleep(1000);
+            _counter.ProcessColor(OrbColor.Blue, "172.16.14.152");
+            CurrentColorCheck(OrbColor.Blue);
+            Thread.Sleep(1000);
+            CurrentColorCheck(OrbColor.Blue);
+
+            _counter.ProcessColor(OrbColor.Green, "172.16.14.134");
+            CurrentColorCheck(OrbColor.Blue);
+            Thread.Sleep(3000);
+            _counter.ProcessColor(OrbColor.Green, "172.16.14.152");
+            CurrentColorCheck(OrbColor.Green);
+            Thread.Sleep(300);
+
         }
 
         [Test]
